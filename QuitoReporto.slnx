@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/API/">
+    <Project Path="API/QuitoReporto.Api/QuitoReporto.Api.csproj" />
+  </Folder>
+  <Folder Name="/APP/">
+    <Project Path="APP/QuitoReporto.App/QuitoReporto.App.csproj" Id="f3495494-758a-4f92-8000-777e0fce89f7" />
+  </Folder>
+</Solution>
