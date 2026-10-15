@@ -7,6 +7,8 @@ namespace QuitoReporto.App
 {
     public partial class MainPage : ContentPage
     {
+        const string OsmUserAgent = "QuitoReporto/1.0 (+https://github.com/Asahi7x/QuitoReporto)";
+
         // Centro histórico de Quito (Plaza Grande)
         const double QuitoLon = -78.5126;
         const double QuitoLat = -0.2202;
@@ -20,7 +22,8 @@ namespace QuitoReporto.App
             InitializeComponent();
 
             var map = MapControl.Map;
-            map.Layers.Add(OpenStreetMap.CreateTileLayer());
+            // OpenStreetMap bloquea ("Access blocked") las peticiones sin un User-Agent propio de la app
+            map.Layers.Add(OpenStreetMap.CreateTileLayer(OsmUserAgent));
 
             var (minX, minY) = SphericalMercator.FromLonLat(MinLon, MinLat);
             var (maxX, maxY) = SphericalMercator.FromLonLat(MaxLon, MaxLat);
