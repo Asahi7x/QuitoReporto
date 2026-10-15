@@ -7,7 +7,7 @@
     Title="QuitoReporto.App">
 
     <ShellContent
-        Title="Home"
+        Title="Mapa"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
