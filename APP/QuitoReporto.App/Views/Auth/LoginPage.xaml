@@ -77,12 +77,19 @@
                         </Grid>
                     </Border>
 
-                    <Grid Margin="0,8,0,0">
+                    <Grid Margin="0,8,0,0" ColumnDefinitions="*,Auto" ColumnSpacing="10">
                         <Button Text="Ingresar" Command="{Binding IniciarSesionCommand}" IsVisible="{Binding NoOcupado}" />
                         <Border HeightRequest="50" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource Primary}"
                                 IsVisible="{Binding Ocupado}">
                             <ActivityIndicator IsRunning="{Binding Ocupado}" Color="White" HeightRequest="22" WidthRequest="22" />
                         </Border>
+
+                        <!-- Ingresar con huella (solo si se activó en este teléfono) -->
+                        <Button Grid.Column="1" Style="{StaticResource BotonTonal}" Text="{x:Static h:Iconos.Huella}"
+                                FontFamily="Icons" FontSize="24" WidthRequest="50" Padding="0"
+                                IsVisible="{Binding HuellaActiva}" IsEnabled="{Binding NoOcupado}"
+                                SemanticProperties.Description="Ingresar con huella"
+                                Command="{Binding IngresarConHuellaCommand}" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12" Margin="0,8,0,0">

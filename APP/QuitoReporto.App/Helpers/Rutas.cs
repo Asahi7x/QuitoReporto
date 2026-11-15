@@ -1,4 +1,4 @@
-namespace QuitoReporto.App.Helpers
+﻿namespace QuitoReporto.App.Helpers
 {
     /// <summary>Rutas de navegación de Shell (ver AppShell.xaml).</summary>
     public static class Rutas
@@ -11,5 +11,6 @@ namespace QuitoReporto.App.Helpers
         public const string Registro = "registro";
         public const string RecuperarClave = "recuperar";
         public const string Detalle = "detalle";
+        public const string SeleccionarUbicacion = "seleccionarubicacion";
     }
 }

@@ -107,21 +107,39 @@
                 <!-- CU-04 Ubicación -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Ubicación" Style="{StaticResource TextoCampo}" />
-                    <Border Style="{StaticResource Tarjeta}" Padding="12">
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                            <Border Style="{StaticResource IconoFondo}"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimarySubtle}, Dark={StaticResource PrimarySubtleDark}}">
-                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="18"
+                    <Border Style="{StaticResource Tarjeta}" Padding="0">
+                        <VerticalStackLayout>
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="12">
+                                <Border Style="{StaticResource IconoFondo}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimarySubtle}, Dark={StaticResource PrimarySubtleDark}}">
+                                    <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="18"
+                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <Label Text="{Binding TextoUbicacion}" FontSize="14" LineBreakMode="WordWrap" />
+                                    <Label Text="Obteniendo tu ubicación…" Style="{StaticResource TextoPequeno}" IsVisible="{Binding BuscandoUbicacion}" />
+                                    <Label Text="Elegida en el mapa" Style="{StaticResource TextoPequeno}" FontSize="12"
+                                           IsVisible="{Binding UbicacionManual}" />
+                                </VerticalStackLayout>
+                                <!-- Volver a usar el GPS -->
+                                <Button Grid.Column="2" Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Ubicarme}"
+                                        WidthRequest="40" HeightRequest="40" CornerRadius="10" FontSize="18" Shadow="{x:Null}"
+                                        SemanticProperties.Description="Usar mi ubicación actual"
+                                        Command="{Binding ObtenerUbicacionCommand}" />
+                            </Grid>
+                            <BoxView Style="{StaticResource Separador}" />
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="16,12">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ElegirEnMapaCommand}" />
+                                </Grid.GestureRecognizers>
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Mapa}" FontSize="16"
                                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
-                            </Border>
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding TextoUbicacion}" FontSize="14" LineBreakMode="WordWrap" />
-                                <Label Text="Obteniendo tu ubicación…" Style="{StaticResource TextoPequeno}" IsVisible="{Binding BuscandoUbicacion}" />
-                            </VerticalStackLayout>
-                            <Button Grid.Column="2" Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Actualizar}"
-                                    WidthRequest="40" HeightRequest="40" CornerRadius="10" FontSize="18" Shadow="{x:Null}"
-                                    Command="{Binding ObtenerUbicacionCommand}" />
-                        </Grid>
+                                <Label Grid.Column="1" Text="Ajustar en el mapa" FontFamily="InterSemiBold" FontSize="14" VerticalOptions="Center"
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                <Label Grid.Column="2" Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Derecha}" FontSize="16"
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                            </Grid>
+                        </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>
 

@@ -1,4 +1,4 @@
-namespace QuitoReporto.App.Services.Interfaces
+﻿namespace QuitoReporto.App.Services.Interfaces
 {
     /// <summary>Navegación y diálogos, para que los ViewModels no dependan de Shell directamente.</summary>
     public interface INavegacionService
@@ -6,6 +6,9 @@ namespace QuitoReporto.App.Services.Interfaces
         Task IrAAsync(string ruta, IDictionary<string, object>? parametros = null);
 
         Task VolverAsync();
+
+        /// <summary>Vuelve a la pantalla anterior entregándole datos (los recibe con IQueryAttributable).</summary>
+        Task VolverAsync(IDictionary<string, object> parametros);
 
         Task MostrarAlertaAsync(string titulo, string mensaje);
 

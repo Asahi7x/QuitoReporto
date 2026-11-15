@@ -42,6 +42,8 @@ namespace QuitoReporto.App
             builder.Services.AddSingleton<IUbicacionService, UbicacionService>();
             builder.Services.AddSingleton<ICamaraService, CamaraService>();
             builder.Services.AddSingleton<INavegacionService, NavegacionService>();
+            builder.Services.AddSingleton(_ => Plugin.Maui.Biometric.BiometricAuthenticationService.Default);
+            builder.Services.AddSingleton<IHuellaService, HuellaService>();
 
             // ViewModels
             builder.Services.AddTransient<LoginViewModel>();
@@ -51,6 +53,7 @@ namespace QuitoReporto.App
             builder.Services.AddTransient<NuevoReporteViewModel>();
             builder.Services.AddTransient<MisReportesViewModel>();
             builder.Services.AddTransient<DetalleReporteViewModel>();
+            builder.Services.AddTransient<SeleccionarUbicacionViewModel>();
             builder.Services.AddTransient<PanelAdminViewModel>();
             builder.Services.AddTransient<PerfilViewModel>();
 
@@ -62,6 +65,7 @@ namespace QuitoReporto.App
             builder.Services.AddTransient<NuevoReportePage>();
             builder.Services.AddTransient<MisReportesPage>();
             builder.Services.AddTransient<DetalleReportePage>();
+            builder.Services.AddTransient<SeleccionarUbicacionPage>();
             builder.Services.AddTransient<PanelAdminPage>();
             builder.Services.AddTransient<PerfilPage>();
 

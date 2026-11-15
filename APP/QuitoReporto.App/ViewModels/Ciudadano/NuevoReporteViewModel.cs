@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using QuitoReporto.App.Helpers;
 using QuitoReporto.App.Models;
@@ -11,7 +11,7 @@ namespace QuitoReporto.App.ViewModels.Ciudadano
         IReporteService reportes,
         IUbicacionService ubicacion,
         ICamaraService camara,
-        INavegacionService navegacion) : BaseViewModel(navegacion)
+        INavegacionService navegacion) : BaseViewModel(navegacion), IQueryAttributable
     {
         public List<OpcionCategoria> Categorias { get; } = OpcionCategoria.Crear(incluirTodas: false);
 
@@ -47,17 +47,48 @@ namespace QuitoReporto.App.ViewModels.Ciudadano
         [ObservableProperty]
         public partial bool BuscandoUbicacion { get; set; }
 
+        /// <summary>true si la ubicación se eligió a mano en el mapa (el GPS ya no la reemplaza).</summary>
+        [ObservableProperty]
+        public partial bool UbicacionManual { get; set; }
+
+        /// <summary>Recibe la ubicación elegida en la pantalla del mapa.</summary>
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            if (query.TryGetValue("ubicacion", out var valor) && valor is UbicacionActual elegida)
+            {
+                Ubicacion = elegida;
+                UbicacionManual = true;
+            }
+            query.Clear();
+        }
+
+        /// <summary>Abre el mapa para ajustar el punto exacto del problema.</summary>
+        [RelayCommand]
+        private Task ElegirEnMapaAsync()
+        {
+            var parametros = new Dictionary<string, object>();
+            if (Ubicacion is not null)
+            {
+                parametros["lat"] = Ubicacion.Latitud;
+                parametros["lon"] = Ubicacion.Longitud;
+            }
+            return Navegacion.IrAAsync(Rutas.SeleccionarUbicacion, parametros);
+        }
+
         [ObservableProperty]
         public partial string? Error { get; set; }
 
         [RelayCommand]
         private async Task IniciarAsync()
         {
-            if (Ubicacion is null) await ObtenerUbicacionAsync();
+            if (Ubicacion is null) await BuscarConGpsAsync(forzarGps: false);
         }
 
+        /// <summary>Botón "actualizar": vuelve a usar el GPS aunque se haya elegido un punto en el mapa.</summary>
         [RelayCommand]
-        private async Task ObtenerUbicacionAsync()
+        private Task ObtenerUbicacionAsync() => BuscarConGpsAsync(forzarGps: true);
+
+        private async Task BuscarConGpsAsync(bool forzarGps)
         {
             if (BuscandoUbicacion) return;
             try
@@ -70,7 +101,11 @@ namespace QuitoReporto.App.ViewModels.Ciudadano
                         "Activa el GPS y concede el permiso de ubicación para registrar dónde está el problema.");
                     return;
                 }
-                Ubicacion = await ubicacion.ObtenerDireccionAsync(posicion.Latitude, posicion.Longitude);
+                var encontrada = await ubicacion.ObtenerDireccionAsync(posicion.Latitude, posicion.Longitude);
+                // Si mientras tanto la persona eligió el punto en el mapa, se respeta su elección
+                if (UbicacionManual && !forzarGps) return;
+                Ubicacion = encontrada;
+                UbicacionManual = false;
             }
             finally
             {
@@ -126,7 +161,7 @@ namespace QuitoReporto.App.ViewModels.Ciudadano
         {
             if (CategoriaSeleccionada?.Valor is null) return "Selecciona una categoría.";
             if (Titulo.Trim().Length < 3) return "Escribe un título de al menos 3 caracteres.";
-            if (Ubicacion is null) return "Necesitamos la ubicación del problema. Toca \"Actualizar ubicación\".";
+            if (Ubicacion is null) return "Necesitamos la ubicación del problema. Usa tu GPS o toca \"Ajustar en el mapa\".";
             if (!TieneFoto) return "Agrega una foto como evidencia.";
             return null;
         }
@@ -137,6 +172,8 @@ namespace QuitoReporto.App.ViewModels.Ciudadano
             CategoriaSeleccionada = null;
             RutaFoto = null;
             Error = null;
+            Ubicacion = null;
+            UbicacionManual = false;
         }
     }
 }

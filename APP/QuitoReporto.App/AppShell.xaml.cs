@@ -14,6 +14,7 @@ namespace QuitoReporto.App
             Routing.RegisterRoute(Rutas.Registro, typeof(RegistroPage));
             Routing.RegisterRoute(Rutas.RecuperarClave, typeof(RecuperarClavePage));
             Routing.RegisterRoute(Rutas.Detalle, typeof(DetalleReportePage));
+            Routing.RegisterRoute(Rutas.SeleccionarUbicacion, typeof(SeleccionarUbicacionPage));
         }
 
         protected override void OnNavigated(ShellNavigatedEventArgs args)

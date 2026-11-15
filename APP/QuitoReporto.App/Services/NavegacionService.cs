@@ -1,4 +1,4 @@
-using QuitoReporto.App.Services.Interfaces;
+﻿using QuitoReporto.App.Services.Interfaces;
 
 namespace QuitoReporto.App.Services
 {
@@ -13,6 +13,8 @@ namespace QuitoReporto.App.Services
                 : Shell.Current.GoToAsync(ruta, parametros);
 
         public Task VolverAsync() => Shell.Current.GoToAsync("..");
+
+        public Task VolverAsync(IDictionary<string, object> parametros) => Shell.Current.GoToAsync("..", parametros);
 
         public Task MostrarAlertaAsync(string titulo, string mensaje) =>
             PaginaActual.DisplayAlertAsync(titulo, mensaje, "Aceptar");

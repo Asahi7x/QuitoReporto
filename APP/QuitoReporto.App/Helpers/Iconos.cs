@@ -44,6 +44,7 @@ namespace QuitoReporto.App.Helpers
         public const string Grafico = "\ue4ac";
         public const string Capas = "\ue104";
         public const string Check = "\ue070";
+        public const string Huella = "\ue2cb";
 
         // Categorías
         public const string Bache = "\ue3b8";

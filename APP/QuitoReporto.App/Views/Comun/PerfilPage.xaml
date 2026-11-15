@@ -74,6 +74,22 @@
                                    TextColor="{AppThemeBinding Light={StaticResource TextSubtle}, Dark={StaticResource TextSubtleDark}}" />
                         </Grid>
                         <BoxView Style="{StaticResource Separador}" Margin="66,0,0,0" />
+                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="16,10" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AlternarHuellaCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource IconoFondo}" WidthRequest="36" HeightRequest="36">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Huella}" FontSize="17" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
+                                <Label Text="Ingresar con huella" FontFamily="InterMedium" />
+                                <Label Text="Entra sin escribir tu contraseña" Style="{StaticResource TextoPequeno}" />
+                            </VerticalStackLayout>
+                            <!-- Solo indica el estado; el toque lo maneja la fila completa -->
+                            <Switch Grid.Column="2" IsToggled="{Binding HuellaActiva, Mode=OneWay}" InputTransparent="True"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                        <BoxView Style="{StaticResource Separador}" Margin="66,0,0,0" />
                         <Grid ColumnDefinitions="Auto,*" Padding="16,14" ColumnSpacing="14">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding CerrarSesionCommand}" />

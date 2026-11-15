@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using QuitoReporto.App.Helpers;
 using QuitoReporto.App.Models;
@@ -10,6 +10,7 @@ namespace QuitoReporto.App.ViewModels.Comun
     public partial class PerfilViewModel(
         IAuthService auth,
         IReporteService reportes,
+        IHuellaService huella,
         INavegacionService navegacion) : BaseViewModel(navegacion)
     {
         [ObservableProperty]
@@ -37,6 +38,10 @@ namespace QuitoReporto.App.ViewModels.Comun
         [ObservableProperty]
         public partial int Resueltos { get; set; }
 
+        /// <summary>Ingreso con huella activo para esta cuenta en este teléfono.</summary>
+        [ObservableProperty]
+        public partial bool HuellaActiva { get; set; }
+
         public string Version => $"QuitoReporto v{AppInfo.Current.VersionString}";
 
         [RelayCommand]
@@ -50,6 +55,8 @@ namespace QuitoReporto.App.ViewModels.Comun
             Inicial = string.IsNullOrWhiteSpace(usuario.Nombre) ? "?" : usuario.Nombre.Trim()[..1].ToUpperInvariant();
             RolTexto = usuario.EsAdministrador ? "Administrador" : "Ciudadano";
             EsCiudadano = !usuario.EsAdministrador;
+            HuellaActiva = huella.Activa
+                && string.Equals(huella.CorreoAsociado, usuario.Correo, StringComparison.OrdinalIgnoreCase);
 
             if (!EsCiudadano) return;
 
@@ -66,6 +73,40 @@ namespace QuitoReporto.App.ViewModels.Comun
         [RelayCommand]
         private Task CambiarClaveAsync() =>
             Navegacion.IrAAsync(Rutas.RecuperarClave, new Dictionary<string, object> { ["correo"] = Correo });
+
+        /// <summary>
+        /// Activa o desactiva el ingreso con huella. Para activarla se necesita la contraseña,
+        /// así que se cierra la sesión y se activa al volver a ingresar con ella.
+        /// </summary>
+        [RelayCommand]
+        private async Task AlternarHuellaAsync()
+        {
+            if (HuellaActiva)
+            {
+                if (!await Navegacion.ConfirmarAsync("Desactivar huella",
+                        "Tendrás que escribir tu contraseña para ingresar.", "Desactivar", "Cancelar"))
+                    return;
+                huella.Desactivar();
+                HuellaActiva = false;
+                return;
+            }
+
+            if (!await huella.DisponibleAsync())
+            {
+                await Navegacion.MostrarAlertaAsync("Huella no disponible",
+                    "Registra una huella digital en los ajustes de seguridad de tu teléfono para usar esta opción.");
+                return;
+            }
+
+            if (!await Navegacion.ConfirmarAsync("Activar huella",
+                    "Por seguridad, confirma tu contraseña: cerraremos la sesión y, al ingresar de nuevo, activaremos tu huella.",
+                    "Continuar", "Cancelar"))
+                return;
+
+            huella.ActivacionPendiente = true;
+            await auth.CerrarSesionAsync();
+            await Navegacion.IrAAsync(Rutas.Login);
+        }
 
         [RelayCommand]
         private async Task CerrarSesionAsync()
