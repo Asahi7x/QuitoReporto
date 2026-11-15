@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Comun"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Comun.PerfilPage"
+             x:DataType="vm:PerfilViewModel"
+             Title="Perfil">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,20,16,32" Spacing="20">
+
+            <!-- Datos de la cuenta -->
+            <Border Style="{StaticResource Tarjeta}" Padding="16">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                    <Border WidthRequest="56" HeightRequest="56" StrokeShape="RoundRectangle 28"
+                            BackgroundColor="{StaticResource Primary}" VerticalOptions="Center">
+                        <Label Text="{Binding Inicial}" FontSize="22" FontFamily="InterSemiBold" TextColor="White"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                        <Label Text="{Binding Nombre}" Style="{StaticResource TextoSubtitulo}" LineBreakMode="TailTruncation" />
+                        <Label Text="{Binding Correo}" Style="{StaticResource TextoPequeno}" LineBreakMode="TailTruncation" />
+                        <Border Style="{StaticResource Etiqueta}" Margin="0,6,0,0"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource PrimarySubtle}, Dark={StaticResource PrimarySubtleDark}}">
+                            <Label Text="{Binding RolTexto}" FontSize="12" FontFamily="InterSemiBold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Resumen de reportes (solo ciudadano) -->
+            <VerticalStackLayout Spacing="10" IsVisible="{Binding EsCiudadano}">
+                <Label Text="Tu actividad" Style="{StaticResource TextoSeccion}" />
+                <Border Style="{StaticResource Tarjeta}" Padding="0,16">
+                    <Grid ColumnDefinitions="*,1,*,1,*">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Total}" Style="{StaticResource TextoMetrica}" HorizontalOptions="Center" />
+                            <Label Text="Reportes" Style="{StaticResource TextoPequeno}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <BoxView Grid.Column="1" WidthRequest="1" Margin="0,4" />
+                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                            <Label Text="{Binding EnCurso}" Style="{StaticResource TextoMetrica}" HorizontalOptions="Center" />
+                            <Label Text="Pendientes" Style="{StaticResource TextoPequeno}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <BoxView Grid.Column="3" WidthRequest="1" Margin="0,4" />
+                        <VerticalStackLayout Grid.Column="4" Spacing="2">
+                            <Label Text="{Binding Resueltos}" Style="{StaticResource TextoMetrica}" TextColor="{AppThemeBinding Light={StaticResource Success}, Dark={StaticResource SuccessDark}}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Resueltos" Style="{StaticResource TextoPequeno}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Opciones -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Cuenta" Style="{StaticResource TextoSeccion}" />
+                <Border Style="{StaticResource Tarjeta}" Padding="0">
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="16,14" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CambiarClaveCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource IconoFondo}" WidthRequest="36" HeightRequest="36">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Llave}" FontSize="17" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
+                                <Label Text="Cambiar contraseña" FontFamily="InterMedium" />
+                                <Label Text="Te enviaremos un código a tu correo" Style="{StaticResource TextoPequeno}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="2" Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Derecha}" FontSize="18"
+                                   TextColor="{AppThemeBinding Light={StaticResource TextSubtle}, Dark={StaticResource TextSubtleDark}}" />
+                        </Grid>
+                        <BoxView Style="{StaticResource Separador}" Margin="66,0,0,0" />
+                        <Grid ColumnDefinitions="Auto,*" Padding="16,14" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CerrarSesionCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource IconoFondo}" WidthRequest="36" HeightRequest="36"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource DangerSubtle}, Dark={StaticResource DangerSubtleDark}}">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Salir}" FontSize="17" TextColor="{AppThemeBinding Light={StaticResource Danger}, Dark={StaticResource DangerDark}}" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Cerrar sesión" FontFamily="InterMedium" TextColor="{AppThemeBinding Light={StaticResource Danger}, Dark={StaticResource DangerDark}}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <ActivityIndicator IsRunning="{Binding Ocupado}" IsVisible="{Binding Ocupado}" HeightRequest="24" />
+
+            <Label Text="{Binding Version}" Style="{StaticResource TextoPequeno}" FontSize="12" HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource TextSubtle}, Dark={StaticResource TextSubtleDark}}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

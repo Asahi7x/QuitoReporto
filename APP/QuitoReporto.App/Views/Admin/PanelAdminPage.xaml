@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Admin"
+             xmlns:m="clr-namespace:QuitoReporto.App.Models"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Admin.PanelAdminPage"
+             x:DataType="vm:PanelAdminViewModel"
+             Title="Panel">
+
+    <RefreshView IsRefreshing="{Binding Refrescando}" Command="{Binding CargarCommand}">
+        <CollectionView x:Name="Lista" ItemsSource="{Binding Reportes}" SelectionMode="Single"
+                        SelectionChangedCommand="{Binding AbrirCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference Lista}, x:DataType=CollectionView}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+
+            <!-- CU-10 Estadísticas -->
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="16,16,16,12" Spacing="16">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{Binding Saludo}" Style="{StaticResource TextoTitulo}" />
+                        <Label Text="Resumen de los reportes ciudadanos." Style="{StaticResource TextoSecundario}" />
+                    </VerticalStackLayout>
+
+                    <!-- Totales por estado -->
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Border Style="{StaticResource Tarjeta}" Padding="14">
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Documento}" FontSize="14" />
+                                    <Label Text="Total" Style="{StaticResource TextoPequeno}" FontFamily="InterMedium" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding Estadisticas.Total}" Style="{StaticResource TextoMetrica}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Tarjeta}" Padding="14">
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Ellipse Fill="{StaticResource Danger}" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                                    <Label Text="Recibidos" Style="{StaticResource TextoPequeno}" FontFamily="InterMedium" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding Estadisticas.Recibidos}" Style="{StaticResource TextoMetrica}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Row="1" Style="{StaticResource Tarjeta}" Padding="14">
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Ellipse Fill="{StaticResource Warning}" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                                    <Label Text="En proceso" Style="{StaticResource TextoPequeno}" FontFamily="InterMedium" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding Estadisticas.EnProceso}" Style="{StaticResource TextoMetrica}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Tarjeta}" Padding="14">
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Ellipse Fill="{StaticResource Success}" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                                    <Label Text="Resueltos" Style="{StaticResource TextoPequeno}" FontFamily="InterMedium" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding Estadisticas.Resueltos}" Style="{StaticResource TextoMetrica}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Por categoría -->
+                    <Border Style="{StaticResource Tarjeta}">
+                        <VerticalStackLayout Spacing="14">
+                            <Label Text="Por categoría" Style="{StaticResource TextoFuerte}" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Estadisticas.PorCategoria}" Spacing="12">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="m:Conteo">
+                                        <VerticalStackLayout Spacing="6">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <Label Text="{Binding Nombre}" FontSize="13" />
+                                                <Label Grid.Column="1" Text="{Binding Cantidad}" FontSize="13" FontFamily="InterSemiBold" />
+                                            </Grid>
+                                            <ProgressBar Progress="{Binding Proporcion}" />
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Por zona -->
+                    <Border Style="{StaticResource Tarjeta}">
+                        <VerticalStackLayout Spacing="14">
+                            <Label Text="Zonas con más reportes" Style="{StaticResource TextoFuerte}" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Estadisticas.PorZona}" Spacing="12">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="m:Conteo">
+                                        <VerticalStackLayout Spacing="6">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <Label Text="{Binding Nombre}" FontSize="13" LineBreakMode="TailTruncation" />
+                                                <Label Grid.Column="1" Text="{Binding Cantidad}" FontSize="13" FontFamily="InterSemiBold" />
+                                            </Grid>
+                                            <ProgressBar Progress="{Binding Proporcion}"
+                                                         ProgressColor="{AppThemeBinding Light={StaticResource Ink}, Dark={StaticResource TextMutedDark}}" />
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- CU-08 Filtros -->
+                    <Label Text="Reportes" Style="{StaticResource TextoSubtitulo}" Margin="0,8,0,0" />
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8" Margin="0,-6,0,0">
+                        <Border Style="{StaticResource Campo}" MinimumHeightRequest="44" HeightRequest="44" Padding="12,0">
+                            <Grid>
+                                <Picker Title="Categoría" ItemsSource="{Binding Categorias}"
+                                        ItemDisplayBinding="{Binding Texto, x:DataType=m:OpcionCategoria}"
+                                        SelectedItem="{Binding CategoriaSeleccionada}" Margin="0,0,18,0" />
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Abajo}" FontSize="16"
+                                       HorizontalOptions="End" InputTransparent="True" />
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Campo}" MinimumHeightRequest="44" HeightRequest="44" Padding="12,0">
+                            <Grid>
+                                <Picker Title="Estado" ItemsSource="{Binding Estados}"
+                                        ItemDisplayBinding="{Binding Texto, x:DataType=m:OpcionEstado}"
+                                        SelectedItem="{Binding EstadoSeleccionado}" Margin="0,0,18,0" />
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Abajo}" FontSize="16"
+                                       HorizontalOptions="End" InputTransparent="True" />
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource Campo}" MinimumHeightRequest="44" HeightRequest="44" Padding="12,0">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Buscar}" FontSize="16" />
+                                <Entry Grid.Column="1" Text="{Binding Zona}" Placeholder="Filtrar por zona (ej.: La Mariscal)" FontSize="14"
+                                       MinimumHeightRequest="40" ReturnType="Search" ReturnCommand="{Binding CargarReportesCommand}"
+                                       h:ResaltarAlEnfocar.Activo="True" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Label Text="No hay reportes con esos filtros." Style="{StaticResource TextoSecundario}"
+                           HorizontalOptions="Center" Margin="0,16" IsVisible="{Binding SinResultados}" />
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.Footer>
+                <BoxView HeightRequest="16" Color="Transparent" />
+            </CollectionView.Footer>
+
+            <!-- CU-09 Reportes con acción para avanzar su estado -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:Reporte">
+                    <Border Style="{StaticResource Tarjeta}" Padding="12" Margin="16,0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SurfaceAlt}, Dark={StaticResource SurfaceAltDark}}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                            <Grid ColumnDefinitions="60,*" ColumnSpacing="12">
+                                <Border Style="{StaticResource Miniatura}" WidthRequest="60" HeightRequest="60" VerticalOptions="Start">
+                                    <Grid>
+                                        <Label Style="{StaticResource Icono}" Text="{Binding CategoriaIcono}" FontSize="20"
+                                               TextColor="{AppThemeBinding Light={StaticResource TextSubtle}, Dark={StaticResource TextSubtleDark}}" />
+                                        <Image Source="{Binding FotoUrl}" Aspect="AspectFill" />
+                                    </Grid>
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="{Binding Titulo}" Style="{StaticResource TextoFuerte}" LineBreakMode="TailTruncation" />
+                                    <Label Style="{StaticResource TextoPequeno}" LineBreakMode="TailTruncation">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding CategoriaTexto}" />
+                                                <Span Text="  ·  " />
+                                                <Span Text="{Binding Zona}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="{Binding FechaTexto}" Style="{StaticResource TextoPequeno}" FontSize="12" Margin="0,0,8,0" />
+                                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Apoyo}" FontSize="13" />
+                                        <Label Text="{Binding Apoyos}" Style="{StaticResource TextoPequeno}" FontSize="12" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
+                            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                                <Border Style="{StaticResource Etiqueta}" BackgroundColor="{Binding Estado, Converter={StaticResource EstadoAFondo}}">
+                                    <HorizontalStackLayout Spacing="6">
+                                        <Border WidthRequest="6" HeightRequest="6" StrokeShape="RoundRectangle 3" VerticalOptions="Center"
+                                                BackgroundColor="{Binding Estado, Converter={StaticResource EstadoATexto}}" />
+                                        <Label Text="{Binding EstadoTexto}" FontSize="12" FontFamily="InterSemiBold"
+                                               TextColor="{Binding Estado, Converter={StaticResource EstadoATexto}}" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Button Grid.Column="1" Text="{Binding TextoAvanzar}" IsVisible="{Binding PuedeAvanzar}"
+                                        Style="{StaticResource BotonTonal}" FontSize="13" Padding="14,0" HeightRequest="36"
+                                        Clicked="AlAvanzarEstado" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

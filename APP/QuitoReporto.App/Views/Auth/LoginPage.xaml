@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Auth"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Auth.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             Title="Iniciar sesión"
+             BackgroundColor="{StaticResource Ink}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Marca -->
+        <VerticalStackLayout Padding="28,64,28,36" Spacing="0">
+            <Border WidthRequest="48" HeightRequest="48" StrokeShape="RoundRectangle 14"
+                    BackgroundColor="{StaticResource Primary}" HorizontalOptions="Start">
+                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="24" TextColor="White" />
+            </Border>
+            <Label Text="QuitoReporto" Style="{StaticResource TextoDisplay}" TextColor="White" Margin="0,24,0,0" />
+            <Label Text="Reporta lo que pasa en tu barrio y sigue cada caso hasta que se resuelva."
+                   FontSize="15" LineHeight="1.3" TextColor="{StaticResource InkMuted}" Margin="0,8,0,0" />
+        </VerticalStackLayout>
+
+        <!-- Formulario -->
+        <Border Grid.Row="1" StrokeShape="RoundRectangle 24,24,0,0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
+            <ScrollView>
+                <VerticalStackLayout Padding="24,32,24,24" Spacing="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Iniciar sesión" Style="{StaticResource TextoTitulo}" />
+                        <Label Text="Ingresa con el correo de tu cuenta." Style="{StaticResource TextoSecundario}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8" Margin="0,8,0,0">
+                        <Label Text="Correo electrónico" Style="{StaticResource TextoCampo}" />
+                        <Border Style="{StaticResource Campo}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Correo}" FontSize="18" />
+                                <Entry Grid.Column="1" Text="{Binding Correo}" Placeholder="nombre@correo.com"
+                                       Keyboard="Email" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False"
+                                       h:ResaltarAlEnfocar.Activo="True" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Contraseña" Style="{StaticResource TextoCampo}" VerticalOptions="End" />
+                            <Button Grid.Column="1" Text="¿La olvidaste?" Style="{StaticResource BotonEnlace}"
+                                    HeightRequest="28" Padding="0" FontSize="13" Margin="0,0,0,-4"
+                                    Command="{Binding IrARecuperarCommand}" />
+                        </Grid>
+                        <Border Style="{StaticResource Campo}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Candado}" FontSize="18" />
+                                <Entry x:Name="CampoClave" Grid.Column="1" Text="{Binding Clave}" Placeholder="Tu contraseña"
+                                       IsPassword="True" ReturnCommand="{Binding IniciarSesionCommand}"
+                                       h:ResaltarAlEnfocar.Activo="True" />
+                                <Label x:Name="IconoOjo" Grid.Column="2" Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Ojo}"
+                                       FontSize="18" Padding="6,12" Margin="0,0,-6,0">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="AlAlternarClave" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Error -->
+                    <Border Padding="12,10" StrokeShape="RoundRectangle 10"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource DangerSubtle}, Dark={StaticResource DangerSubtleDark}}"
+                            IsVisible="{Binding Error, Converter={StaticResource NoVacio}}">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Alerta}" FontSize="16"
+                                   TextColor="{AppThemeBinding Light={StaticResource Danger}, Dark={StaticResource DangerDark}}" VerticalOptions="Start" Margin="0,1,0,0" />
+                            <Label Grid.Column="1" Text="{Binding Error}" Style="{StaticResource TextoError}" FontSize="14" />
+                        </Grid>
+                    </Border>
+
+                    <Grid Margin="0,8,0,0">
+                        <Button Text="Ingresar" Command="{Binding IniciarSesionCommand}" IsVisible="{Binding NoOcupado}" />
+                        <Border HeightRequest="50" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource Primary}"
+                                IsVisible="{Binding Ocupado}">
+                            <ActivityIndicator IsRunning="{Binding Ocupado}" Color="White" HeightRequest="22" WidthRequest="22" />
+                        </Border>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <BoxView Style="{StaticResource Separador}" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="¿Eres nuevo?" Style="{StaticResource TextoPequeno}" />
+                        <BoxView Grid.Column="2" Style="{StaticResource Separador}" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Button Text="Crear una cuenta" Style="{StaticResource BotonSecundario}" Command="{Binding IrARegistroCommand}" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
+</ContentPage>

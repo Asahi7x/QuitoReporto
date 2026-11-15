@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Ciudadano"
+             xmlns:m="clr-namespace:QuitoReporto.App.Models"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Ciudadano.NuevoReportePage"
+             x:DataType="vm:NuevoReporteViewModel"
+             Title="Nuevo reporte">
+
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView>
+            <VerticalStackLayout Padding="16,20,16,24" Spacing="28">
+
+                <!-- Categoría -->
+                <VerticalStackLayout Spacing="12">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="¿Qué problema encontraste?" Style="{StaticResource TextoSubtitulo}" />
+                        <Label Text="Elige la categoría que mejor lo describe." Style="{StaticResource TextoPequeno}" />
+                    </VerticalStackLayout>
+                    <CollectionView ItemsSource="{Binding Categorias}" SelectionMode="Single"
+                                    SelectedItem="{Binding CategoriaSeleccionada}" HeightRequest="88">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="8" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="m:OpcionCategoria">
+                                <Border StrokeShape="RoundRectangle 12" StrokeThickness="1" HeightRequest="88" Padding="4"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
+                                        Stroke="{AppThemeBinding Light={StaticResource Line}, Dark={StaticResource LineDark}}">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroupList>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal" />
+                                                <VisualState x:Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                                                        <Setter Property="StrokeThickness" Value="1.5" />
+                                                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimarySubtle}, Dark={StaticResource PrimarySubtleDark}}" />
+                                                        <Setter TargetName="IconoCategoria" Property="Label.TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                                        <Setter TargetName="NombreCategoria" Property="Label.TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateGroupList>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                                        <Label x:Name="IconoCategoria" Style="{StaticResource Icono}" Text="{Binding Icono}" FontSize="24" />
+                                        <Label x:Name="NombreCategoria" Text="{Binding Texto}" FontSize="12" FontFamily="InterMedium"
+                                               HorizontalTextAlignment="Center" LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Título -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Título" Style="{StaticResource TextoCampo}" />
+                    <Border Style="{StaticResource Campo}">
+                        <Entry Text="{Binding Titulo}" Placeholder="Ej.: Bache grande en la Av. 6 de Diciembre" MaxLength="120"
+                               h:ResaltarAlEnfocar.Activo="True" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- CU-03 Foto -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Foto de evidencia" Style="{StaticResource TextoCampo}" />
+
+                    <Border StrokeShape="RoundRectangle 12" HeightRequest="220" IsVisible="{Binding TieneFoto}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceAlt}, Dark={StaticResource SurfaceAltDark}}">
+                        <Grid>
+                            <Image Source="{Binding RutaFoto}" Aspect="AspectFill" />
+                            <Button Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Cerrar}" FontSize="16"
+                                    WidthRequest="36" HeightRequest="36" CornerRadius="18" BorderWidth="0"
+                                    BackgroundColor="#B3000000" TextColor="White"
+                                    HorizontalOptions="End" VerticalOptions="Start" Margin="10"
+                                    Command="{Binding QuitarFotoCommand}" />
+                        </Grid>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 12" StrokeThickness="1.5" StrokeDashArray="4,3" Padding="16,20"
+                            Stroke="{AppThemeBinding Light={StaticResource LineStrong}, Dark={StaticResource LineStrongDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
+                            IsVisible="{Binding TieneFoto, Converter={StaticResource BoolInverso}}">
+                        <VerticalStackLayout Spacing="14">
+                            <Border Style="{StaticResource IconoFondo}" HorizontalOptions="Center" WidthRequest="44" HeightRequest="44"
+                                    StrokeShape="RoundRectangle 22">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Camara}" />
+                            </Border>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Agrega una foto del problema" Style="{StaticResource TextoFuerte}" HorizontalOptions="Center" />
+                                <Label Text="Ayuda a que el equipo lo ubique y priorice más rápido." Style="{StaticResource TextoPequeno}"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <Button Text="Tomar foto" Style="{StaticResource BotonTonal}" HeightRequest="44" FontSize="14"
+                                        Command="{Binding TomarFotoCommand}" />
+                                <Button Grid.Column="1" Text="Galería" Style="{StaticResource BotonSecundario}" HeightRequest="44" FontSize="14"
+                                        Command="{Binding ElegirFotoCommand}" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- CU-04 Ubicación -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Ubicación" Style="{StaticResource TextoCampo}" />
+                    <Border Style="{StaticResource Tarjeta}" Padding="12">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                            <Border Style="{StaticResource IconoFondo}"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimarySubtle}, Dark={StaticResource PrimarySubtleDark}}">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="18"
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding TextoUbicacion}" FontSize="14" LineBreakMode="WordWrap" />
+                                <Label Text="Obteniendo tu ubicación…" Style="{StaticResource TextoPequeno}" IsVisible="{Binding BuscandoUbicacion}" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="2" Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Actualizar}"
+                                    WidthRequest="40" HeightRequest="40" CornerRadius="10" FontSize="18" Shadow="{x:Null}"
+                                    Command="{Binding ObtenerUbicacionCommand}" />
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Descripción -->
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Descripción" Style="{StaticResource TextoCampo}" />
+                        <Label Grid.Column="1" Text="Opcional" Style="{StaticResource TextoPequeno}" FontSize="12" />
+                    </Grid>
+                    <Border Style="{StaticResource Campo}" Padding="10,4">
+                        <Editor Text="{Binding Descripcion}" Placeholder="Tamaño, referencias cercanas, desde cuándo está así…"
+                                AutoSize="TextChanges" MinimumHeightRequest="110" MaxLength="1000"
+                                h:ResaltarAlEnfocar.Activo="True" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Border Padding="12,10" StrokeShape="RoundRectangle 10"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource DangerSubtle}, Dark={StaticResource DangerSubtleDark}}"
+                        IsVisible="{Binding Error, Converter={StaticResource NoVacio}}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Alerta}" FontSize="16"
+                               TextColor="{AppThemeBinding Light={StaticResource Danger}, Dark={StaticResource DangerDark}}" VerticalOptions="Start" Margin="0,1,0,0" />
+                        <Label Grid.Column="1" Text="{Binding Error}" Style="{StaticResource TextoError}" FontSize="14" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Enviar -->
+        <Border Grid.Row="1" Style="{StaticResource BarraInferior}">
+            <Grid>
+                <Button Text="Enviar reporte" Command="{Binding EnviarCommand}" IsVisible="{Binding NoOcupado}" />
+                <Border HeightRequest="50" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource Primary}"
+                        IsVisible="{Binding Ocupado}">
+                    <ActivityIndicator IsRunning="{Binding Ocupado}" Color="White" HeightRequest="22" WidthRequest="22" />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

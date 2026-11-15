@@ -1,44 +1,68 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ResourceDictionary 
+<!--
+    Paleta de QuitoReporto.
+    Una sola marca (azul institucional), neutros fríos para superficies y texto,
+    y colores de estado sobrios. En Android ver también Platforms/Android/Resources/values/colors.xml
+-->
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
+    <!-- Marca -->
+    <Color x:Key="Primary">#1F48C4</Color>
+    <Color x:Key="PrimaryPressed">#183A9E</Color>
+    <Color x:Key="PrimarySubtle">#EDF1FC</Color>
+    <Color x:Key="PrimaryDark">#7C9DF7</Color>
+    <Color x:Key="PrimarySubtleDark">#18234A</Color>
+    <Color x:Key="Ink">#0B1730</Color>
+    <Color x:Key="InkMuted">#8B9AB8</Color>
+    <Color x:Key="Accent">#D7263D</Color>
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
-    <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <!-- Neutros (modo claro) -->
+    <Color x:Key="Bg">#F5F6F8</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="SurfaceAlt">#F0F2F5</Color>
+    <Color x:Key="Line">#E3E6EB</Color>
+    <Color x:Key="LineStrong">#CCD1D9</Color>
+    <Color x:Key="Text">#0F1729</Color>
+    <Color x:Key="TextMuted">#596273</Color>
+    <Color x:Key="TextSubtle">#8A93A3</Color>
 
-    <Color x:Key="White">White</Color>
-    <Color x:Key="Black">Black</Color>
-    <Color x:Key="Magenta">#D600AA</Color>
-    <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <!-- Neutros (modo oscuro) -->
+    <Color x:Key="BgDark">#0A0E15</Color>
+    <Color x:Key="SurfaceDark">#121823</Color>
+    <Color x:Key="SurfaceAltDark">#1A2130</Color>
+    <Color x:Key="LineDark">#252E3F</Color>
+    <Color x:Key="LineStrongDark">#344057</Color>
+    <Color x:Key="TextDark">#E9EDF3</Color>
+    <Color x:Key="TextMutedDark">#9BA5B6</Color>
+    <Color x:Key="TextSubtleDark">#6C7687</Color>
 
-    <Color x:Key="Gray100">#E1E1E1</Color>
-    <Color x:Key="Gray200">#C8C8C8</Color>
-    <Color x:Key="Gray300">#ACACAC</Color>
-    <Color x:Key="Gray400">#919191</Color>
-    <Color x:Key="Gray500">#6E6E6E</Color>
-    <Color x:Key="Gray600">#404040</Color>
-    <Color x:Key="Gray900">#212121</Color>
-    <Color x:Key="Gray950">#141414</Color>
+    <!-- Estados y feedback -->
+    <Color x:Key="Danger">#C4321F</Color>
+    <Color x:Key="DangerSubtle">#FDEDEA</Color>
+    <Color x:Key="DangerSubtleDark">#3B1A15</Color>
+    <Color x:Key="Warning">#B85C00</Color>
+    <Color x:Key="Success">#0F7A4A</Color>
+    <Color x:Key="DangerDark">#F4958A</Color>
+    <Color x:Key="WarningDark">#F2B566</Color>
+    <Color x:Key="SuccessDark">#5FCF98</Color>
 
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
-    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
-    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
-    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
-    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
 
-    <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}"/>
-    <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}"/>
-    <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}"/>
-    <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}"/>
-    <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}"/>
-    <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
-    <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
-    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+    <!-- Foco de campos (lo usa Helpers/ResaltarAlEnfocar) -->
+    <Color x:Key="CampoBordeFoco">#3B63D9</Color>
+
+    <!-- Alias usados por los estilos base de MAUI -->
+    <Color x:Key="Gray100">#E3E6EB</Color>
+    <Color x:Key="Gray200">#CCD1D9</Color>
+    <Color x:Key="Gray300">#A7AFBC</Color>
+    <Color x:Key="Gray400">#8A93A3</Color>
+    <Color x:Key="Gray500">#596273</Color>
+    <Color x:Key="Gray600">#344057</Color>
+    <Color x:Key="Gray900">#121823</Color>
+    <Color x:Key="Gray950">#0A0E15</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
 </ResourceDictionary>

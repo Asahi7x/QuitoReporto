@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Auth"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Auth.RegistroPage"
+             x:DataType="vm:RegistroViewModel"
+             Title=""
+             BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,8,24,32" Spacing="16">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Crea tu cuenta" Style="{StaticResource TextoDisplay}" />
+                <Label Text="Reporta problemas, apoya los reportes de tus vecinos y recibe el avance de cada caso."
+                       Style="{StaticResource TextoSecundario}" LineHeight="1.3" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8" Margin="0,12,0,0">
+                <Label Text="Nombre completo" Style="{StaticResource TextoCampo}" />
+                <Border Style="{StaticResource Campo}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Usuario}" FontSize="18" />
+                        <Entry Grid.Column="1" Text="{Binding Nombre}" Placeholder="María Andrade" Keyboard="Text"
+                               h:ResaltarAlEnfocar.Activo="True" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Correo electrónico" Style="{StaticResource TextoCampo}" />
+                <Border Style="{StaticResource Campo}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Correo}" FontSize="18" />
+                        <Entry Grid.Column="1" Text="{Binding Correo}" Placeholder="nombre@correo.com" Keyboard="Email"
+                               IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" h:ResaltarAlEnfocar.Activo="True" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Contraseña" Style="{StaticResource TextoCampo}" />
+                <Border Style="{StaticResource Campo}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Candado}" FontSize="18" />
+                        <Entry Grid.Column="1" Text="{Binding Clave}" Placeholder="Mínimo 6 caracteres" IsPassword="True"
+                               h:ResaltarAlEnfocar.Activo="True" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Confirmar contraseña" Style="{StaticResource TextoCampo}" />
+                <Border Style="{StaticResource Campo}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Candado}" FontSize="18" />
+                        <Entry Grid.Column="1" Text="{Binding ConfirmarClave}" Placeholder="Repite tu contraseña" IsPassword="True"
+                               ReturnCommand="{Binding RegistrarCommand}" h:ResaltarAlEnfocar.Activo="True" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <Border Padding="12,10" StrokeShape="RoundRectangle 10"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource DangerSubtle}, Dark={StaticResource DangerSubtleDark}}"
+                    IsVisible="{Binding Error, Converter={StaticResource NoVacio}}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Alerta}" FontSize="16"
+                           TextColor="{AppThemeBinding Light={StaticResource Danger}, Dark={StaticResource DangerDark}}" VerticalOptions="Start" Margin="0,1,0,0" />
+                    <Label Grid.Column="1" Text="{Binding Error}" Style="{StaticResource TextoError}" FontSize="14" />
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,8,0,0">
+                <Button Text="Crear cuenta" Command="{Binding RegistrarCommand}" IsVisible="{Binding NoOcupado}" />
+                <Border HeightRequest="50" StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource Primary}"
+                        IsVisible="{Binding Ocupado}">
+                    <ActivityIndicator IsRunning="{Binding Ocupado}" Color="White" HeightRequest="22" WidthRequest="22" />
+                </Border>
+            </Grid>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                <Label Text="¿Ya tienes cuenta?" Style="{StaticResource TextoSecundario}" VerticalOptions="Center" />
+                <Button Text="Inicia sesión" Style="{StaticResource BotonEnlace}" Command="{Binding VolverCommand}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

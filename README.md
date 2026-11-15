@@ -100,12 +100,39 @@ Basadas en los [mockups del proyecto](https://drive.google.com/file/d/1lurh5FRPk
 ```
 QuitoReporto/
 ├── API/
-│   └── QuitoReporto.Api/      # Backend en ASP.NET Core Web API
+│   └── QuitoReporto.Api/        # Backend en ASP.NET Core Web API
 ├── APP/
-│   └── QuitoReporto.App/      # Aplicación móvil en .NET MAUI
-├── QuitoReporto.slnx          # Solución de Visual Studio
+│   └── QuitoReporto.App/        # Aplicación móvil en .NET MAUI
+├── TESTS/
+│   └── QuitoReporto.Api.Tests/  # Pruebas xUnit de la API
+├── .github/workflows/ci.yml     # Integración continua (GitHub Actions)
+├── docker-compose.yml           # PostgreSQL para desarrollo
+├── dotnet-tools.json            # Herramienta dotnet-ef para migraciones
+├── QuitoReporto.slnx            # Solución de Visual Studio
 └── README.md
 ```
+
+## 🌐 API REST
+
+Todas las rutas (salvo autenticación y categorías) requieren el encabezado `Authorization: Bearer <token>`.
+
+| Método | Ruta | Descripción | Caso de uso |
+| --- | --- | --- | --- |
+| POST | `/api/auth/registro` | Crear cuenta de ciudadano | CU-01 |
+| POST | `/api/auth/login` | Iniciar sesión (devuelve un JWT) | CU-01 |
+| POST | `/api/auth/recuperar` | Enviar código de 6 dígitos al correo | CU-01 |
+| POST | `/api/auth/restablecer` | Cambiar la clave con el código | CU-01 |
+| GET | `/api/auth/yo` | Usuario de la sesión actual | |
+| GET | `/api/categorias` | Bache, Luz, Basura, Otros | |
+| GET | `/api/reportes` | Listado con filtros `categoriaId`, `estado`, `zona`, `buscar`, `mios`, `lat`/`lon`/`radioKm` | CU-05, CU-06, CU-08 |
+| GET | `/api/reportes/{id}` | Detalle con línea de tiempo, apoyos y comentarios | |
+| POST | `/api/reportes` | Crear reporte (multipart con foto y ubicación) | CU-02, CU-03, CU-04 |
+| POST | `/api/reportes/{id}/apoyo` | Apoyar o quitar el apoyo | CU-07 |
+| POST | `/api/reportes/{id}/comentarios` | Comentar | CU-07 |
+| PUT | `/api/reportes/{id}/estado` | Cambiar estado (solo administrador) | CU-09 |
+| GET | `/api/admin/estadisticas` | Totales por estado, categoría y zona (solo administrador) | CU-10 |
+
+En `API/QuitoReporto.Api/QuitoReporto.Api.http` hay ejemplos listos para probar desde Visual Studio o VS Code.
 
 ## 🏛️ Arquitectura de la app
 
@@ -131,12 +158,14 @@ La app sigue el patrón **MVVM (Model-View-ViewModel)**, que es el que recomiend
 ```
 APP/QuitoReporto.App/
 ├── Models/
-│   ├── Usuario.cs
-│   ├── Reporte.cs
+│   ├── Usuario.cs                # Usuario, Rol y respuesta de autenticación
+│   ├── Reporte.cs                # Reporte, línea de tiempo, filtros y estadísticas
 │   ├── Comentario.cs
 │   ├── Categoria.cs              # Bache, Luz, Basura, Otros
-│   └── EstadoReporte.cs          # Recibido, EnProceso, Resuelto
+│   ├── EstadoReporte.cs          # Recibido, EnProceso, Resuelto
+│   └── Opcion.cs                 # Opciones de los filtros (Pickers)
 ├── ViewModels/
+│   ├── BaseViewModel.cs          # Estado "ocupado" y manejo de errores común
 │   ├── Auth/
 │   │   ├── LoginViewModel.cs
 │   │   ├── RegistroViewModel.cs
@@ -165,14 +194,20 @@ APP/QuitoReporto.App/
 │   │   ├── IAuthService.cs
 │   │   ├── IReporteService.cs
 │   │   ├── IUbicacionService.cs
-│   │   └── ICamaraService.cs
+│   │   ├── ICamaraService.cs
+│   │   └── INavegacionService.cs
+│   ├── ApiCliente.cs             # HttpClient compartido: JSON, token y errores
 │   ├── AuthService.cs            # Login, registro y recuperación de clave
 │   ├── ReporteService.cs         # CRUD de reportes, apoyos y comentarios
-│   ├── UbicacionService.cs       # GPS y geocodificación
-│   └── CamaraService.cs          # Captura de fotos
-├── Converters/                   # Ej.: EstadoAColorConverter
+│   ├── UbicacionService.cs       # GPS y geocodificación (OpenStreetMap Nominatim)
+│   ├── CamaraService.cs          # Captura de fotos
+│   └── NavegacionService.cs      # Navegación de Shell y diálogos
+├── Converters/
+│   └── EstadoAColorConverter.cs  # EstadoAColor, BoolInverso, NoVacio
 ├── Helpers/
-│   └── Constantes.cs             # URL de la API, claves, etc.
+│   ├── Constantes.cs             # URL de la API, límites de Quito, etc.
+│   ├── Rutas.cs                  # Rutas de navegación
+│   └── Validacion.cs
 ├── Resources/                    # Íconos, fuentes, imágenes y estilos
 ├── Platforms/                    # Código y permisos por plataforma (cámara, GPS)
 ├── App.xaml
@@ -190,6 +225,7 @@ APP/QuitoReporto.App/
 ### Requisitos
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - Visual Studio 2022 (o compatible) con la carga de trabajo **Desarrollo de interfaz de usuario de aplicaciones multiplataforma de .NET**
+- [Docker](https://www.docker.com/) para la base de datos (o un PostgreSQL instalado localmente)
 - Emulador de Android o un dispositivo físico
 
 ### Pasos
@@ -199,14 +235,45 @@ APP/QuitoReporto.App/
 git clone https://github.com/Asahi7x/QuitoReporto.git
 cd QuitoReporto
 
-# 2. Levantar la API
+# 2. Levantar PostgreSQL
+docker compose up -d
+
+# 3. Levantar la API (aplica las migraciones y crea el administrador al iniciar)
 dotnet run --project API/QuitoReporto.Api
 
-# 3. Ejecutar la app en Android
+# 4. Ejecutar la app en Android
 dotnet build APP/QuitoReporto.App -t:Run -f net10.0-android
 ```
 
 También se puede abrir `QuitoReporto.slnx` en Visual Studio y ejecutar cada proyecto desde ahí.
+
+### Configuración
+
+| Qué | Dónde | Valor por defecto |
+| --- | --- | --- |
+| Cadena de conexión | `ConnectionStrings:Default` en `appsettings.json` | `Host=localhost;Database=quitoreporto;Username=postgres;Password=postgres` |
+| Administrador inicial | Sección `Admin` | `admin@quitoreporto.ec` / `Admin123!` |
+| Clave para firmar los JWT | `Jwt:Clave` (mínimo 32 caracteres) | Solo hay una en `appsettings.Development.json`; en producción usar la variable de entorno `Jwt__Clave` |
+| Envío de correos | Sección `Smtp` | Vacía: el código de recuperación se escribe en la consola de la API |
+| Carpeta de fotos | `Almacenamiento:CarpetaFotos` | `API/QuitoReporto.Api/uploads` (se publica en `/uploads`) |
+| URL de la API en la app | `APP/QuitoReporto.App/Helpers/Constantes.cs` | `http://10.0.2.2:5184` en el emulador de Android, `http://localhost:5184` en el resto |
+
+> **Celular físico:** cambia `ApiUrl` en `Constantes.cs` por la IP de tu PC (por ejemplo `http://192.168.1.10:5184`) y arranca la API con `dotnet run --project API/QuitoReporto.Api --urls http://0.0.0.0:5184`.
+
+### Migraciones
+
+```bash
+dotnet tool restore
+dotnet ef migrations add NombreDelCambio --project API/QuitoReporto.Api -o Data/Migrations
+```
+
+### Pruebas
+
+```bash
+dotnet test TESTS/QuitoReporto.Api.Tests
+```
+
+Las pruebas levantan la API en memoria con una base de datos InMemory, así que no necesitan PostgreSQL. Cubren registro, inicio de sesión, recuperación de clave, creación y filtros de reportes, apoyos, comentarios, permisos del administrador, cambios de estado y estadísticas.
 
 ## 🗺️ Alcance de la primera versión
 

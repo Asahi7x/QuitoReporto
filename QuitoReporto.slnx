@@ -5,4 +5,7 @@
   <Folder Name="/APP/">
     <Project Path="APP/QuitoReporto.App/QuitoReporto.App.csproj" Id="f3495494-758a-4f92-8000-777e0fce89f7" />
   </Folder>
+  <Folder Name="/TESTS/">
+    <Project Path="TESTS/QuitoReporto.Api.Tests/QuitoReporto.Api.Tests.csproj" />
+  </Folder>
 </Solution>
