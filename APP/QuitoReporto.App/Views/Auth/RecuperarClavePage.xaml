@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Auth"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Auth.RecuperarClavePage"
+             x:DataType="vm:RecuperarClaveViewModel"
+             Title=""
+             BackgroundColor="{StaticResource Navy}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="36,8,36,28" Spacing="0">
+
+            <!-- LOGO: reservado (150 x 150). Descomenta cuando agregues el archivo:
+                 <Image Source="logo.png" Aspect="AspectFit" /> -->
+            <Grid HeightRequest="150" WidthRequest="150" HorizontalOptions="Center" />
+
+            <!-- Paso 1: correo -->
+            <VerticalStackLayout Spacing="0" IsVisible="{Binding PasoCorreo}">
+                <Label Text="¿Olvidaste tu contraseña?" Style="{StaticResource AuthTitulo}" Margin="4,12,0,12" />
+                <Label Text="No te preocupes, te ayudaremos a recuperarla. Ingresa tu correo electronico y te enviaremos un codigo de autentificacion"
+                       Style="{StaticResource AuthTexto}" Margin="4,0,0,20" />
+
+                <Label Text="Correo" Style="{StaticResource AuthEtiqueta}" />
+                <Border Style="{StaticResource Campo}" Margin="0,6,0,0">
+                    <Entry Text="{Binding Correo}" Style="{StaticResource AuthEntry}" Keyboard="Email"
+                           IsSpellCheckEnabled="False" IsTextPredictionEnabled="False"
+                           ReturnCommand="{Binding EnviarCodigoCommand}" h:ResaltarAlEnfocar.Activo="True" />
+                </Border>
+
+                <Button Text="Confirmar" Style="{StaticResource BotonAuth}" Margin="0,28,0,0"
+                        Command="{Binding EnviarCodigoCommand}" />
+            </VerticalStackLayout>
+
+            <!-- Paso 2: código y nueva clave -->
+            <VerticalStackLayout Spacing="0" IsVisible="{Binding CodigoEnviado}">
+                <Label Text="Verifica tu código" Style="{StaticResource AuthTitulo}" Margin="4,12,0,12" />
+                <Label Style="{StaticResource AuthTexto}" Margin="4,0,0,20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Ingresa el codigo de 6 digitos que te enviamos a " />
+                            <Span Text="{Binding Correo}" TextColor="White" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Border Style="{StaticResource Campo}" HeightRequest="60">
+                    <Entry Text="{Binding Codigo}" Style="{StaticResource AuthEntry}" Placeholder="000000"
+                           Keyboard="Numeric" MaxLength="6" HorizontalTextAlignment="Center"
+                           FontSize="26" CharacterSpacing="12" h:ResaltarAlEnfocar.Activo="True" />
+                </Border>
+
+                <Label Text="Nueva Contraseña" Style="{StaticResource AuthTitulo}" FontSize="28" Margin="4,28,0,12" />
+
+                <Label Text="Clave" Style="{StaticResource AuthEtiqueta}" />
+                <Border Style="{StaticResource Campo}" Margin="0,6,0,12">
+                    <Entry Text="{Binding NuevaClave}" Style="{StaticResource AuthEntry}" IsPassword="True"
+                           h:ResaltarAlEnfocar.Activo="True" />
+                </Border>
+
+                <Label Text="Confirmar Clave" Style="{StaticResource AuthEtiqueta}" />
+                <Border Style="{StaticResource Campo}" Margin="0,6,0,0">
+                    <Entry Text="{Binding ConfirmarClave}" Style="{StaticResource AuthEntry}" IsPassword="True"
+                           ReturnCommand="{Binding RestablecerCommand}" h:ResaltarAlEnfocar.Activo="True" />
+                </Border>
+
+                <Button Text="Confirmar" Style="{StaticResource BotonAuth}" Margin="0,28,0,0"
+                        Command="{Binding RestablecerCommand}" />
+
+                <Button Text="Reenviar Codigo" Style="{StaticResource BotonEnlaceAuth}" Margin="0,12,0,0"
+                        HorizontalOptions="Center" Command="{Binding EnviarCodigoCommand}" />
+                <Button Text="Cambiar correo" Style="{StaticResource BotonEnlaceAuth}"
+                        HorizontalOptions="Center" Command="{Binding CambiarCorreoCommand}" />
+            </VerticalStackLayout>
+
+            <Border Style="{StaticResource AvisoError}" Margin="0,16,0,0"
+                    IsVisible="{Binding Error, Converter={StaticResource NoVacio}}">
+                <Label Text="{Binding Error}" Style="{StaticResource AuthTexto}" TextColor="White" />
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding Ocupado}" IsVisible="{Binding Ocupado}" HeightRequest="24" Margin="0,16,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

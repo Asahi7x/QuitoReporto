@@ -1,0 +1,58 @@
+@host = http://localhost:5184
+# Pega aquí el token que devuelve /api/auth/login
+@token =
+
+### Categorías
+GET {{host}}/api/categorias
+
+### Registro
+POST {{host}}/api/auth/registro
+Content-Type: application/json
+
+{ "nombre": "Ciudadano de prueba", "correo": "ciudadano@ejemplo.com", "clave": "Clave123" }
+
+### Login (administrador inicial)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "correo": "admin@quitoreporto.ec", "clave": "Admin123!" }
+
+### Recuperar clave (sin SMTP configurado, el código aparece en la consola de la API)
+POST {{host}}/api/auth/recuperar
+Content-Type: application/json
+
+{ "correo": "ciudadano@ejemplo.com" }
+
+### Reportes cercanos a la Plaza Grande (5 km)
+GET {{host}}/api/reportes?lat=-0.2202&lon=-78.5126&radioKm=5
+Authorization: Bearer {{token}}
+
+### Mis reportes
+GET {{host}}/api/reportes?mios=true
+Authorization: Bearer {{token}}
+
+### Detalle
+GET {{host}}/api/reportes/1
+Authorization: Bearer {{token}}
+
+### Apoyar / quitar apoyo
+POST {{host}}/api/reportes/1/apoyo
+Authorization: Bearer {{token}}
+
+### Comentar
+POST {{host}}/api/reportes/1/comentarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "texto": "A mí también me afecta" }
+
+### Cambiar estado (administrador): 0 Recibido, 1 En proceso, 2 Resuelto
+PUT {{host}}/api/reportes/1/estado
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "estado": 1, "nota": "Cuadrilla asignada" }
+
+### Estadísticas (administrador)
+GET {{host}}/api/admin/estadisticas
+Authorization: Bearer {{token}}

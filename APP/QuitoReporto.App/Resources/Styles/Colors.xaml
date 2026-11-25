@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Paleta tomada de los mockups de QuitoReporta. Las claves antiguas se conservan. -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Marca -->
+    <Color x:Key="Navy">#2C4773</Color>
+    <Color x:Key="NavyDeep">#020C45</Color>
+    <Color x:Key="CampoFondo">#C8D1D9</Color>
+    <Color x:Key="Verde">#00BF63</Color>
+    <Color x:Key="Rojo">#FF3131</Color>
+    <Color x:Key="Naranja">#FFBD59</Color>
+    <Color x:Key="Morado">#AC8BFF</Color>
+    <Color x:Key="Gris">#A7A6A6</Color>
+    <Color x:Key="TextoEnCampo">#1B2A41</Color>
+    <Color x:Key="MapaFondo">#DDE7DC</Color>
+
+    <Color x:Key="Primary">#00BF63</Color>
+    <Color x:Key="PrimaryPressed">#009A4F</Color>
+    <Color x:Key="PrimarySubtle">#3B5A8C</Color>
+    <Color x:Key="PrimaryDark">#00BF63</Color>
+    <Color x:Key="PrimarySubtleDark">#3B5A8C</Color>
+    <Color x:Key="Ink">#020C45</Color>
+    <Color x:Key="InkMuted">#A7A6A6</Color>
+    <Color x:Key="Accent">#FF3131</Color>
+
+    <!-- Neutros (los mockups solo tienen un tema: claro y oscuro usan lo mismo) -->
+    <Color x:Key="Bg">#2C4773</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="SurfaceAlt">#C8D1D9</Color>
+    <Color x:Key="Line">#3B5A8C</Color>
+    <Color x:Key="LineStrong">#C8D1D9</Color>
+    <Color x:Key="Text">#FFFFFF</Color>
+    <Color x:Key="TextMuted">#A7A6A6</Color>
+    <Color x:Key="TextSubtle">#A7A6A6</Color>
+
+    <Color x:Key="BgDark">#2C4773</Color>
+    <Color x:Key="SurfaceDark">#FFFFFF</Color>
+    <Color x:Key="SurfaceAltDark">#C8D1D9</Color>
+    <Color x:Key="LineDark">#3B5A8C</Color>
+    <Color x:Key="LineStrongDark">#C8D1D9</Color>
+    <Color x:Key="TextDark">#FFFFFF</Color>
+    <Color x:Key="TextMutedDark">#A7A6A6</Color>
+    <Color x:Key="TextSubtleDark">#A7A6A6</Color>
+
+    <!-- Estados -->
+    <Color x:Key="Danger">#FF3131</Color>
+    <Color x:Key="DangerSubtle">#FF3131</Color>
+    <Color x:Key="DangerSubtleDark">#FF3131</Color>
+    <Color x:Key="Warning">#FFBD59</Color>
+    <Color x:Key="Success">#00BF63</Color>
+    <Color x:Key="DangerDark">#FFFFFF</Color>
+    <Color x:Key="WarningDark">#FFBD59</Color>
+    <Color x:Key="SuccessDark">#00BF63</Color>
+
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+    <Color x:Key="CampoBordeFoco">#00BF63</Color>
+
+    <Color x:Key="Gray100">#E3E6EB</Color>
+    <Color x:Key="Gray200">#C8D1D9</Color>
+    <Color x:Key="Gray300">#A7A6A6</Color>
+    <Color x:Key="Gray400">#A7A6A6</Color>
+    <Color x:Key="Gray500">#596273</Color>
+    <Color x:Key="Gray600">#2C4773</Color>
+    <Color x:Key="Gray900">#020C45</Color>
+    <Color x:Key="Gray950">#020C45</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+</ResourceDictionary>

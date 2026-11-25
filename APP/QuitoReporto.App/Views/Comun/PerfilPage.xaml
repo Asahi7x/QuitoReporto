@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Comun"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Comun.PerfilPage"
+             x:DataType="vm:PerfilViewModel"
+             Title="Perfil"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="28,28,28,32" Spacing="20">
+
+            <Label Text="Perfil" Style="{StaticResource TextoTitulo}" />
+
+            <!-- Datos de la cuenta -->
+            <Border Style="{StaticResource Tarjeta}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                    <Border WidthRequest="60" HeightRequest="60" StrokeShape="RoundRectangle 30"
+                            BackgroundColor="{StaticResource Rojo}" VerticalOptions="Center">
+                        <Label Text="{Binding Inicial}" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
+                        <Label Text="{Binding Nombre}" FontSize="30" LineBreakMode="TailTruncation" />
+                        <Label Text="{Binding Correo}" Style="{StaticResource TextoPequeno}" LineBreakMode="TailTruncation" />
+                        <Border Style="{StaticResource Etiqueta}" Margin="0,6,0,0" BackgroundColor="{StaticResource Verde}">
+                            <Label Text="{Binding RolTexto}" FontSize="18" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Resumen de reportes (solo ciudadano) -->
+            <VerticalStackLayout Spacing="10" IsVisible="{Binding EsCiudadano}">
+                <Label Text="Tu actividad" Style="{StaticResource TextoSeccion}" />
+                <Border Style="{StaticResource TarjetaClara}" Padding="0,16">
+                    <Grid ColumnDefinitions="*,1,*,1,*">
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="{Binding Total}" Style="{StaticResource TextoMetrica}" HorizontalOptions="Center" />
+                            <Label Text="Reportes" Style="{StaticResource TextoOscuroSuave}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <BoxView Grid.Column="1" WidthRequest="1" Margin="0,4" Color="{StaticResource CampoFondo}" />
+                        <VerticalStackLayout Grid.Column="2" Spacing="0">
+                            <Label Text="{Binding EnCurso}" Style="{StaticResource TextoMetrica}" HorizontalOptions="Center" />
+                            <Label Text="Pendientes" Style="{StaticResource TextoOscuroSuave}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <BoxView Grid.Column="3" WidthRequest="1" Margin="0,4" Color="{StaticResource CampoFondo}" />
+                        <VerticalStackLayout Grid.Column="4" Spacing="0">
+                            <Label Text="{Binding Resueltos}" Style="{StaticResource TextoMetrica}" TextColor="{StaticResource Verde}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Resueltos" Style="{StaticResource TextoOscuroSuave}" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Opciones -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Cuenta" Style="{StaticResource TextoSeccion}" />
+                <Border Style="{StaticResource Tarjeta}" Padding="0">
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="18,14" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CambiarClaveCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource IconoFondo}" WidthRequest="40" HeightRequest="40" StrokeShape="RoundRectangle 20">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Llave}" FontSize="18" TextColor="{StaticResource Rojo}" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                                <Label Text="Cambiar contraseña" FontSize="24" />
+                                <Label Text="Te enviaremos un código a tu correo" Style="{StaticResource TextoPequeno}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="2" Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Derecha}" FontSize="18"
+                                   TextColor="{StaticResource Gris}" />
+                        </Grid>
+                        <BoxView Style="{StaticResource Separador}" Margin="18,0" />
+                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="18,10" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AlternarHuellaCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource IconoFondo}" WidthRequest="40" HeightRequest="40" StrokeShape="RoundRectangle 20">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Huella}" FontSize="18" TextColor="{StaticResource Rojo}" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                                <Label Text="Ingresar con huella" FontSize="24" />
+                                <Label Text="Entra sin escribir tu contraseña" Style="{StaticResource TextoPequeno}" />
+                            </VerticalStackLayout>
+                            <!-- Solo indica el estado; el toque lo maneja la fila completa -->
+                            <Switch Grid.Column="2" IsToggled="{Binding HuellaActiva, Mode=OneWay}" InputTransparent="True"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                        <BoxView Style="{StaticResource Separador}" Margin="18,0" />
+                        <Grid ColumnDefinitions="Auto,*" Padding="18,14" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CerrarSesionCommand}" />
+                            </Grid.GestureRecognizers>
+                            <Border Style="{StaticResource IconoFondo}" WidthRequest="40" HeightRequest="40" StrokeShape="RoundRectangle 20"
+                                    BackgroundColor="{StaticResource Rojo}">
+                                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Salir}" FontSize="18" />
+                            </Border>
+                            <Label Grid.Column="1" Text="Cerrar sesión" FontSize="24" TextColor="{StaticResource Rojo}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <ActivityIndicator IsRunning="{Binding Ocupado}" IsVisible="{Binding Ocupado}" HeightRequest="24" />
+
+            <Label Text="{Binding Version}" Style="{StaticResource TextoPequeno}" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

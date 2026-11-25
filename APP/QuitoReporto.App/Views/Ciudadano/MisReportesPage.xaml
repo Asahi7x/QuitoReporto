@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Ciudadano"
+             xmlns:m="clr-namespace:QuitoReporto.App.Models"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Ciudadano.MisReportesPage"
+             x:DataType="vm:MisReportesViewModel"
+             Title="Mis reportes"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="28,28,28,0" RowSpacing="18">
+        <Label Text="Mis reportes" Style="{StaticResource TextoTitulo}" />
+
+        <!-- Buscador y filtro -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,150" ColumnSpacing="8">
+            <Border Style="{StaticResource Campo}" HeightRequest="46" Padding="18,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Entry Text="{Binding Buscar}" Placeholder="Buscar/Filtrar" ReturnType="Search"
+                           h:ResaltarAlEnfocar.Activo="True" />
+                    <Label Grid.Column="1" Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Buscar}" FontSize="20"
+                           TextColor="{StaticResource Black}" />
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource Campo}" HeightRequest="46" Padding="18,0">
+                <Grid>
+                    <Picker Title="Estado" ItemsSource="{Binding Estados}"
+                            ItemDisplayBinding="{Binding Texto, x:DataType=m:OpcionEstado}"
+                            SelectedItem="{Binding EstadoSeleccionado}" Margin="0,0,20,0" />
+                    <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Filtros}" FontSize="18"
+                           TextColor="{StaticResource Black}" HorizontalOptions="End" InputTransparent="True" />
+                </Grid>
+            </Border>
+        </Grid>
+
+        <RefreshView Grid.Row="2" IsRefreshing="{Binding Refrescando}" Command="{Binding CargarCommand}">
+            <CollectionView x:Name="Lista" ItemsSource="{Binding Reportes}" SelectionMode="Single"
+                            SelectionChangedCommand="{Binding AbrirCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference Lista}, x:DataType=CollectionView}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.Footer>
+                    <BoxView HeightRequest="16" Color="Transparent" />
+                </CollectionView.Footer>
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32,56" Spacing="12" IsVisible="{Binding SinResultados}">
+                        <Label Text="{Binding TextoVacio}" HorizontalTextAlignment="Center" Style="{StaticResource TextoSecundario}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="m:Reporte">
+                        <Border Style="{StaticResource TarjetaClara}" Padding="14,12">
+                            <Grid ColumnDefinitions="64,*,Auto" ColumnSpacing="14">
+                                <Border Style="{StaticResource Miniatura}" WidthRequest="64" HeightRequest="64" VerticalOptions="Center">
+                                    <Grid>
+                                        <Label Style="{StaticResource Icono}" Text="{Binding CategoriaIcono}" FontSize="24"
+                                               TextColor="#596273" />
+                                        <Image Source="{Binding FotoUrl}" Aspect="AspectFill" />
+                                    </Grid>
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
+                                    <Label Text="{Binding Titulo}" Style="{StaticResource TextoOscuro}" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding FechaTexto}" Style="{StaticResource TextoOscuroSuave}" LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+                                <Border Grid.Column="2" Style="{StaticResource Etiqueta}"
+                                        BackgroundColor="{Binding Estado, Converter={StaticResource EstadoAFondo}}">
+                                    <Label Text="{Binding EstadoTexto}" FontSize="19"
+                                           TextColor="{Binding Estado, Converter={StaticResource EstadoATexto}}" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Ciudadano"
+             xmlns:m="clr-namespace:QuitoReporto.App.Models"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Ciudadano.DetalleReportePage"
+             x:DataType="vm:DetalleReporteViewModel"
+             Title="Reporte"
+             Shell.TabBarIsVisible="False">
+
+    <Grid RowDefinitions="*,Auto">
+        <ActivityIndicator IsRunning="{Binding Ocupado}" IsVisible="{Binding Ocupado}"
+                           VerticalOptions="Center" HorizontalOptions="Center" ZIndex="1" />
+
+        <ScrollView IsVisible="{Binding Cargado}">
+            <VerticalStackLayout Padding="24,16,24,24" Spacing="16">
+
+                <!-- Foto -->
+                <Border StrokeShape="RoundRectangle 28" HeightRequest="230" BackgroundColor="{StaticResource CampoFondo}">
+                    <Image Source="{Binding Reporte.FotoUrl}" Aspect="AspectFill" IsVisible="{Binding Reporte.TieneFoto}" />
+                </Border>
+
+                <!-- Encabezado -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Border Style="{StaticResource Etiqueta}" Padding="18,4"
+                                    BackgroundColor="{Binding Reporte.Estado, Converter={StaticResource EstadoAFondo}}">
+                                <Label Text="{Binding Reporte.EstadoTexto}" FontSize="22"
+                                       TextColor="{Binding Reporte.Estado, Converter={StaticResource EstadoATexto}}" />
+                            </Border>
+                            <Border Style="{StaticResource Etiqueta}" BackgroundColor="{StaticResource Navy}">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Style="{StaticResource Icono}" Text="{Binding Reporte.CategoriaIcono}" FontSize="14" />
+                                    <Label Text="{Binding Reporte.CategoriaTexto}" FontSize="19" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding Reporte.Titulo}" FontSize="40" />
+                        <Label Text="{Binding Reporte.Ubicacion}" FontSize="22" TextColor="{StaticResource Gris}" />
+                        <Label FontSize="20" TextColor="{StaticResource Gris}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Reporte.Autor}" />
+                                    <Span Text="  -  " />
+                                    <Span Text="{Binding Reporte.FechaTexto}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Text="{Binding Reporte.Descripcion}" FontSize="22" LineHeight="1.1" Margin="0,4,0,0"
+                               IsVisible="{Binding Reporte.Descripcion, Converter={StaticResource NoVacio}}" />
+                        <Button Text="Abrir en mapas" Style="{StaticResource BotonRojo}" HorizontalOptions="Start"
+                                HeightRequest="34" FontSize="18" Margin="0,6,0,0" Command="{Binding AbrirEnMapasCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- CU-07 Apoyar -->
+                <Button Text="{Binding TextoApoyo}" Command="{Binding ApoyarCommand}" IsVisible="{Binding PuedeApoyar}"
+                        HeightRequest="48" CornerRadius="22" />
+
+                <!-- CU-09 Cambiar estado (solo administrador) -->
+                <Border Style="{StaticResource Tarjeta}" IsVisible="{Binding EsAdministrador}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Actualizar estado" Style="{StaticResource TextoFuerte}" />
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                            <Button Text="Recibido" FontSize="19" HeightRequest="40" Padding="4,0" CornerRadius="20"
+                                    BackgroundColor="{StaticResource Naranja}"
+                                    Command="{Binding CambiarEstadoCommand}" CommandParameter="Recibido" />
+                            <Button Grid.Column="1" Text="En proceso" FontSize="19" HeightRequest="40" Padding="4,0" CornerRadius="20"
+                                    BackgroundColor="{StaticResource Morado}"
+                                    Command="{Binding CambiarEstadoCommand}" CommandParameter="EnProceso" />
+                            <Button Grid.Column="2" Text="Resuelto" FontSize="19" HeightRequest="40" Padding="4,0" CornerRadius="20"
+                                    BackgroundColor="{StaticResource Verde}"
+                                    Command="{Binding CambiarEstadoCommand}" CommandParameter="Resuelto" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Línea de tiempo + apoyos y comentarios -->
+                <Border Style="{StaticResource Tarjeta}" Padding="18,14">
+                    <VerticalStackLayout Spacing="12">
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Historial}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="m:CambioEstado">
+                                    <Grid ColumnDefinitions="20,*" ColumnSpacing="10" Padding="0,0,0,10">
+                                        <BoxView WidthRequest="2" HorizontalOptions="Center" Margin="0,16,0,-10" Color="{StaticResource Rojo}" />
+                                        <Border WidthRequest="14" HeightRequest="14" StrokeShape="RoundRectangle 7" VerticalOptions="Start"
+                                                Margin="0,3,0,0" BackgroundColor="{Binding Estado, Converter={StaticResource EstadoAColor}}" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                                            <Label FontSize="19" TextColor="{StaticResource Gris}">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Titulo}" />
+                                                        <Span Text=" - " />
+                                                        <Span Text="{Binding FechaTexto}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Text="{Binding Nota}" FontSize="20" IsVisible="{Binding TieneNota}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Apoyo}" FontSize="26" />
+                            <Label Text="{Binding Reporte.Apoyos}" FontSize="30" VerticalOptions="Center" Margin="0,0,16,0" />
+                            <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Comentario}" FontSize="26" />
+                            <Label Text="{Binding Reporte.ComentariosTotal}" FontSize="30" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- CU-07 Comentarios -->
+                <Border Style="{StaticResource Tarjeta}" Padding="18,14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Todavía no hay comentarios." Style="{StaticResource TextoSecundario}"
+                               IsVisible="{Binding SinComentarios}" />
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Comentarios}" Spacing="8">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="m:Comentario">
+                                    <VerticalStackLayout Spacing="0">
+                                        <Label Text="{Binding Autor, StringFormat='@{0}'}" FontSize="26" />
+                                        <Label Text="{Binding Texto}" FontSize="19" TextColor="{StaticResource Gris}" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Nuevo comentario -->
+        <Border Grid.Row="1" Style="{StaticResource BarraInferior}" Padding="14,10" IsVisible="{Binding Cargado}">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Style="{StaticResource Campo}" HeightRequest="46" Padding="20,0">
+                    <Entry Text="{Binding NuevoComentario}" Placeholder="Escribe un comentario…" MaxLength="500"
+                           ReturnCommand="{Binding ComentarCommand}" />
+                </Border>
+                <Button Grid.Column="1" Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Enviar}" FontSize="20"
+                        WidthRequest="46" HeightRequest="46" CornerRadius="23" Shadow="{x:Null}"
+                        BackgroundColor="{StaticResource Verde}" TextColor="White"
+                        Command="{Binding ComentarCommand}" />
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

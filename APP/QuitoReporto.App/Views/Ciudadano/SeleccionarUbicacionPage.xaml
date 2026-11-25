@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Ciudadano"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Ciudadano.SeleccionarUbicacionPage"
+             x:DataType="vm:SeleccionarUbicacionViewModel"
+             Title="Elegir ubicación"
+             Shell.TabBarIsVisible="False">
+
+    <Grid RowDefinitions="*,Auto">
+        <Grid>
+            <mapsui:MapControl x:Name="Mapa" />
+
+            <!-- Pin fijo: su punta marca el centro exacto del mapa -->
+            <Grid HorizontalOptions="Center" VerticalOptions="Center" InputTransparent="True"
+                  WidthRequest="48" HeightRequest="96">
+                <Ellipse WidthRequest="10" HeightRequest="4" Fill="#55000000" VerticalOptions="Center" Margin="0,4,0,0" />
+                <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="44"
+                       VerticalOptions="Start" TranslationY="2" TextColor="{StaticResource Rojo}" />
+            </Grid>
+
+            <!-- Indicación -->
+            <Border Style="{StaticResource TarjetaFlotante}" StrokeShape="RoundRectangle 20" Padding="16,8" Margin="12"
+                    HorizontalOptions="Center" VerticalOptions="Start">
+                <HorizontalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Navegar}" FontSize="14" />
+                    <Label Text="Mueve el mapa o toca el punto exacto" FontSize="19" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <Button Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Ubicarme}" Command="{Binding UbicarmeCommand}"
+                    HorizontalOptions="End" VerticalOptions="End" Margin="0,0,12,16"
+                    BackgroundColor="{StaticResource Rojo}" TextColor="White" BorderWidth="0" />
+        </Grid>
+
+        <!-- Dirección del punto y confirmación -->
+        <Border Grid.Row="1" Style="{StaticResource BarraInferior}" Padding="20,16">
+            <VerticalStackLayout Spacing="14">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Border Style="{StaticResource IconoFondo}"
+                            >
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="18"
+                               TextColor="{StaticResource Rojo}" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding TextoDireccion}" Style="{StaticResource TextoFuerte}" FontSize="22"
+                                   LineBreakMode="TailTruncation" MaxLines="2">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding Moviendo}" Value="True">
+                                        <Setter Property="Opacity" Value="0.4" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <ActivityIndicator Grid.Column="1" IsRunning="{Binding BuscandoDireccion}" IsVisible="{Binding BuscandoDireccion}"
+                                               HeightRequest="16" WidthRequest="16" Margin="8,0,0,0" />
+                        </Grid>
+                        <Label Text="{Binding TextoCoordenadas}" Style="{StaticResource TextoPequeno}" FontSize="16" />
+                    </VerticalStackLayout>
+                </Grid>
+                <Button Text="Confirmar ubicación" HeightRequest="52" CornerRadius="20" Command="{Binding ConfirmarCommand}"
+                        IsEnabled="{Binding Moviendo, Converter={StaticResource BoolInverso}}" />
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Auth"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Auth.RegistroPage"
+             x:DataType="vm:RegistroViewModel"
+             Title=""
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Navy}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="36,32,36,28" Spacing="0">
+
+            <!-- LOGO: reservado (150 x 150). Descomenta cuando agregues el archivo:
+                 <Image Source="logo.png" Aspect="AspectFit" /> -->
+            <Grid HeightRequest="150" WidthRequest="150" HorizontalOptions="Center" />
+
+            <Label Text="Regístrate" Style="{StaticResource AuthTitulo}" Margin="4,12,0,16" />
+
+            <Label Text="Correo" Style="{StaticResource AuthEtiqueta}" />
+            <Border Style="{StaticResource Campo}" Margin="0,6,0,12">
+                <Entry Text="{Binding Correo}" Style="{StaticResource AuthEntry}" Keyboard="Email"
+                       IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" h:ResaltarAlEnfocar.Activo="True" />
+            </Border>
+
+            <Label Text="Usuario" Style="{StaticResource AuthEtiqueta}" />
+            <Border Style="{StaticResource Campo}" Margin="0,6,0,12">
+                <Entry Text="{Binding Nombre}" Style="{StaticResource AuthEntry}" Keyboard="Text"
+                       h:ResaltarAlEnfocar.Activo="True" />
+            </Border>
+
+            <Label Text="Clave" Style="{StaticResource AuthEtiqueta}" />
+            <Border Style="{StaticResource Campo}" Margin="0,6,0,12">
+                <Entry Text="{Binding Clave}" Style="{StaticResource AuthEntry}" IsPassword="True"
+                       h:ResaltarAlEnfocar.Activo="True" />
+            </Border>
+
+            <Label Text="Confirmar Clave" Style="{StaticResource AuthEtiqueta}" />
+            <Border Style="{StaticResource Campo}" Margin="0,6,0,0">
+                <Entry Text="{Binding ConfirmarClave}" Style="{StaticResource AuthEntry}" IsPassword="True"
+                       ReturnCommand="{Binding RegistrarCommand}" h:ResaltarAlEnfocar.Activo="True" />
+            </Border>
+
+            <Border Style="{StaticResource AvisoError}" Margin="0,16,0,0"
+                    IsVisible="{Binding Error, Converter={StaticResource NoVacio}}">
+                <Label Text="{Binding Error}" Style="{StaticResource AuthTexto}" TextColor="White" />
+            </Border>
+
+            <Grid Margin="0,28,0,0" HorizontalOptions="Center">
+                <Button Text="Confirmar" Style="{StaticResource BotonAuth}"
+                        Command="{Binding RegistrarCommand}" IsVisible="{Binding NoOcupado}" />
+                <Border HeightRequest="52" WidthRequest="124" StrokeShape="RoundRectangle 18"
+                        BackgroundColor="{StaticResource Verde}" IsVisible="{Binding Ocupado}">
+                    <ActivityIndicator IsRunning="{Binding Ocupado}" Color="White" HeightRequest="22" WidthRequest="22" />
+                </Border>
+            </Grid>
+
+            <Button Text="Volver a iniciar sesion" Style="{StaticResource BotonEnlaceAuth}" Margin="0,12,0,0"
+                    HorizontalOptions="Center" Command="{Binding VolverCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

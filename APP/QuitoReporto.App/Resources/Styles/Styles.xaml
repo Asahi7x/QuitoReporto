@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Estilos de QuitoReporta según los mockups.
+    Pantallas de acceso: Questrial.  Resto de la app: Bebas Neue.  Iconos: Lucide ("Icons").
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ============ Base ============ -->
+
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource Navy}" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <Setter Property="Shell.BackgroundColor" Value="{StaticResource Navy}" />
+        <Setter Property="Shell.ForegroundColor" Value="{StaticResource White}" />
+        <Setter Property="Shell.TitleColor" Value="{StaticResource White}" />
+        <Setter Property="Shell.DisabledColor" Value="{StaticResource Gris}" />
+        <Setter Property="Shell.UnselectedColor" Value="{StaticResource White}" />
+        <Setter Property="Shell.NavBarHasShadow" Value="False" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource NavyDeep}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Rojo}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Rojo}" />
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource White}" />
+    </Style>
+
+    <Style x:Key="TextoBase" TargetType="Label">
+        <Setter Property="FontFamily" Value="BebasNeue" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+    </Style>
+    <Style TargetType="Label" BasedOn="{StaticResource TextoBase}" />
+
+    <Style TargetType="Entry">
+        <Setter Property="FontFamily" Value="BebasNeue" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource TextoEnCampo}" />
+        <Setter Property="PlaceholderColor" Value="#7C8794" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Editor">
+        <Setter Property="FontFamily" Value="BebasNeue" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource TextoEnCampo}" />
+        <Setter Property="PlaceholderColor" Value="#7C8794" />
+    </Style>
+
+    <Style TargetType="Picker">
+        <Setter Property="FontFamily" Value="BebasNeue" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource TextoEnCampo}" />
+        <Setter Property="TitleColor" Value="#596273" />
+        <Setter Property="MinimumHeightRequest" Value="40" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="ActivityIndicator">
+        <Setter Property="Color" Value="{StaticResource White}" />
+    </Style>
+
+    <Style TargetType="RefreshView">
+        <Setter Property="RefreshColor" Value="{StaticResource Verde}" />
+    </Style>
+
+    <Style TargetType="Switch">
+        <Setter Property="OnColor" Value="{StaticResource Verde}" />
+        <Setter Property="ThumbColor" Value="{StaticResource White}" />
+    </Style>
+
+    <Style TargetType="ProgressBar">
+        <Setter Property="ProgressColor" Value="{StaticResource Verde}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Black}" />
+    </Style>
+
+    <Style TargetType="Border">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="Rectangle" />
+    </Style>
+
+    <Style TargetType="BoxView">
+        <Setter Property="Color" Value="{StaticResource Line}" />
+    </Style>
+
+    <!-- ============ Botones ============ -->
+
+    <Style x:Key="BotonBase" TargetType="Button">
+        <Setter Property="FontFamily" Value="BebasNeue" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="18" />
+        <Setter Property="Padding" Value="24,0" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+    </Style>
+
+    <Style x:Key="BotonPrimario" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource Verde}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.5" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource BotonPrimario}" />
+
+    <!-- Botón verde de las pantallas de acceso (Questrial) -->
+    <Style x:Key="BotonAuth" TargetType="Button" BasedOn="{StaticResource BotonPrimario}">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="19" />
+        <Setter Property="HeightRequest" Value="52" />
+        <Setter Property="MinimumWidthRequest" Value="124" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <!-- Enlace gris de las pantallas de acceso -->
+    <Style x:Key="BotonEnlaceAuth" TargetType="Button">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="TextColor" Value="{StaticResource Gris}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="HeightRequest" Value="36" />
+    </Style>
+
+    <!-- Pastilla roja (CANCELAR, MAPA, MIS REPORTES) -->
+    <Style x:Key="BotonRojo" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource Rojo}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="CornerRadius" Value="18" />
+        <Setter Property="HeightRequest" Value="38" />
+        <Setter Property="Padding" Value="20,0" />
+    </Style>
+
+    <!-- Pastilla naranja (CAMBIAR ESTADO, acciones secundarias) -->
+    <Style x:Key="BotonTonal" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource Naranja}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="Padding" Value="18,0" />
+    </Style>
+
+    <Style x:Key="BotonSecundario" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="BorderColor" Value="{StaticResource White}" />
+        <Setter Property="BorderWidth" Value="1.5" />
+    </Style>
+
+    <Style x:Key="BotonEnlace" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Gris}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="HeightRequest" Value="40" />
+    </Style>
+
+    <Style x:Key="BotonPeligro" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="BackgroundColor" Value="{StaticResource Rojo}" />
+    </Style>
+
+    <!-- Botón redondo blanco con icono rojo -->
+    <Style x:Key="BotonIcono" TargetType="Button" BasedOn="{StaticResource BotonBase}">
+        <Setter Property="FontFamily" Value="Icons" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="WidthRequest" Value="52" />
+        <Setter Property="HeightRequest" Value="52" />
+        <Setter Property="CornerRadius" Value="26" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+        <Setter Property="TextColor" Value="{StaticResource Rojo}" />
+        <Setter Property="Shadow">
+            <Shadow Brush="Black" Opacity="0.20" Radius="10" Offset="0,3" />
+        </Setter>
+    </Style>
+
+    <!-- ============ Tipografía ============ -->
+
+    <Style x:Key="AuthMarca" TargetType="Label">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="42" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="AuthTitulo" TargetType="Label">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="34" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+    </Style>
+    <Style x:Key="AuthTexto" TargetType="Label">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="LineHeight" Value="1.3" />
+        <Setter Property="TextColor" Value="{StaticResource Gris}" />
+    </Style>
+    <Style x:Key="AuthEtiqueta" TargetType="Label">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="19" />
+        <Setter Property="TextColor" Value="{StaticResource Gris}" />
+        <Setter Property="Margin" Value="4,0,0,0" />
+    </Style>
+    <Style x:Key="AuthEntry" TargetType="Entry">
+        <Setter Property="FontFamily" Value="Questrial" />
+        <Setter Property="FontSize" Value="17" />
+    </Style>
+
+    <Style x:Key="TextoDisplay" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="42" />
+    </Style>
+    <Style x:Key="TextoTitulo" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="36" />
+    </Style>
+    <Style x:Key="TextoSubtitulo" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="28" />
+    </Style>
+    <Style x:Key="TextoFuerte" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="24" />
+    </Style>
+    <Style x:Key="TextoSecundario" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource Gris}" />
+    </Style>
+    <Style x:Key="TextoPequeno" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="TextColor" Value="{StaticResource Gris}" />
+    </Style>
+    <Style x:Key="TextoCampo" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="26" />
+    </Style>
+    <Style x:Key="TextoSeccion" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="26" />
+    </Style>
+    <Style x:Key="TextoError" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+    <Style x:Key="TextoMetrica" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="34" />
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+    </Style>
+
+    <!-- Textos sobre tarjetas blancas -->
+    <Style x:Key="TextoOscuro" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+    </Style>
+    <Style x:Key="TextoOscuroSuave" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontSize" Value="19" />
+        <Setter Property="TextColor" Value="{StaticResource Black}" />
+    </Style>
+
+    <Style x:Key="Icono" TargetType="Label" BasedOn="{StaticResource TextoBase}">
+        <Setter Property="FontFamily" Value="Icons" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+    </Style>
+
+    <!-- ============ Contenedores ============ -->
+
+    <!-- Tarjeta azul noche (detalle del reporte) -->
+    <Style x:Key="Tarjeta" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource NavyDeep}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+        <Setter Property="Padding" Value="20" />
+    </Style>
+
+    <!-- Tarjeta blanca (listas de reportes, estadísticas) -->
+    <Style x:Key="TarjetaClara" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <Style x:Key="TarjetaFlotante" TargetType="Border" BasedOn="{StaticResource Tarjeta}">
+        <Setter Property="Shadow">
+            <Shadow Brush="Black" Opacity="0.20" Radius="14" Offset="0,4" />
+        </Setter>
+    </Style>
+
+    <!-- Campo de texto: pastilla gris azulada -->
+    <Style x:Key="Campo" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource CampoFondo}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="Stroke" Value="{StaticResource Verde}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+        <Setter Property="Padding" Value="20,0" />
+        <Setter Property="MinimumHeightRequest" Value="46" />
+    </Style>
+
+    <!-- Etiqueta de estado: pastilla sólida (el color lo da el converter) -->
+    <Style x:Key="Etiqueta" TargetType="Border">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+        <Setter Property="Padding" Value="14,3" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="IconoFondo" TargetType="Border">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 26" />
+        <Setter Property="WidthRequest" Value="52" />
+        <Setter Property="HeightRequest" Value="52" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+    </Style>
+
+    <Style x:Key="Miniatura" TargetType="Border">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+        <Setter Property="BackgroundColor" Value="{StaticResource CampoFondo}" />
+    </Style>
+
+    <Style x:Key="Separador" TargetType="BoxView">
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="Color" Value="{StaticResource Line}" />
+    </Style>
+
+    <Style x:Key="BarraInferior" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource NavyDeep}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
+    <!-- Aviso de error -->
+    <Style x:Key="AvisoError" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Rojo}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+        <Setter Property="Padding" Value="14,10" />
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             xmlns:vm="clr-namespace:QuitoReporto.App.ViewModels.Ciudadano"
+             xmlns:m="clr-namespace:QuitoReporto.App.Models"
+             xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+             x:Class="QuitoReporto.App.Views.Ciudadano.MapaPage"
+             x:DataType="vm:MapaViewModel"
+             Title="Mapa de reportes"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Encabezado -->
+        <Grid BackgroundColor="{StaticResource Navy}" Padding="20,16,20,14" ColumnDefinitions="*,Auto">
+            <VerticalStackLayout VerticalOptions="Center">
+                <Label Text="Reportes cercanos" FontSize="40" />
+            </VerticalStackLayout>
+            <!-- LOGO: reservado (64 x 64). Descomenta cuando agregues el archivo:
+                 <Image Grid.Column="1" Source="logo.png" HeightRequest="64" WidthRequest="64" /> -->
+            <Grid Grid.Column="1" HeightRequest="64" WidthRequest="64" />
+        </Grid>
+
+        <Grid Grid.Row="1" BackgroundColor="{StaticResource MapaFondo}">
+            <!-- CU-05: mapa de OpenStreetMap con los reportes como marcadores -->
+            <mapsui:MapControl x:Name="Mapa" />
+
+            <!-- Filtros -->
+            <Border Style="{StaticResource TarjetaFlotante}" Margin="12,12,12,0" Padding="0" VerticalOptions="Start"
+                    BackgroundColor="{StaticResource White}" StrokeShape="RoundRectangle 22">
+                <VerticalStackLayout>
+                    <Grid ColumnDefinitions="*,1,*" Padding="18,2" ColumnSpacing="12">
+                        <Grid>
+                            <Picker Title="Categoría" ItemsSource="{Binding Categorias}"
+                                    ItemDisplayBinding="{Binding Texto, x:DataType=m:OpcionCategoria}"
+                                    SelectedItem="{Binding CategoriaSeleccionada}" Margin="0,0,20,0" />
+                            <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Abajo}" FontSize="16"
+                                   TextColor="{StaticResource Black}" HorizontalOptions="End" InputTransparent="True" />
+                        </Grid>
+                        <BoxView Grid.Column="1" WidthRequest="1" Margin="0,10" Color="{StaticResource CampoFondo}" />
+                        <Grid Grid.Column="2">
+                            <Picker Title="Estado" ItemsSource="{Binding Estados}"
+                                    ItemDisplayBinding="{Binding Texto, x:DataType=m:OpcionEstado}"
+                                    SelectedItem="{Binding EstadoSeleccionado}" Margin="0,0,20,0" />
+                            <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Abajo}" FontSize="16"
+                                   TextColor="{StaticResource Black}" HorizontalOptions="End" InputTransparent="True" />
+                        </Grid>
+                    </Grid>
+                    <BoxView HeightRequest="1" Color="{StaticResource CampoFondo}" />
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="18,4" ColumnSpacing="10">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Navegar}" FontSize="16"
+                               TextColor="{StaticResource Rojo}" />
+                        <Label Grid.Column="1" Text="Solo a 10 km de mí" FontSize="20" TextColor="{StaticResource Black}"
+                               VerticalOptions="Center" />
+                        <ActivityIndicator Grid.Column="2" IsRunning="{Binding Ocupado}" IsVisible="{Binding Ocupado}"
+                                           Color="{StaticResource Rojo}" HeightRequest="18" WidthRequest="18" VerticalOptions="Center" />
+                        <Switch Grid.Column="3" IsToggled="{Binding SoloCercanos}" VerticalOptions="Center" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Leyenda -->
+            <Border Style="{StaticResource TarjetaFlotante}" StrokeShape="RoundRectangle 18" Padding="14,8" Margin="12,0,0,16"
+                    HorizontalOptions="Start" VerticalOptions="End"
+                    IsVisible="{Binding HayReporteSeleccionado, Converter={StaticResource BoolInverso}}">
+                <HorizontalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="6">
+                        <Ellipse Fill="{StaticResource Naranja}" WidthRequest="10" HeightRequest="10" VerticalOptions="Center" />
+                        <Label Text="Recibido" FontSize="17" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6">
+                        <Ellipse Fill="{StaticResource Morado}" WidthRequest="10" HeightRequest="10" VerticalOptions="Center" />
+                        <Label Text="En proceso" FontSize="17" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6">
+                        <Ellipse Fill="{StaticResource Verde}" WidthRequest="10" HeightRequest="10" VerticalOptions="Center" />
+                        <Label Text="Resuelto" FontSize="17" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Acciones del mapa -->
+            <VerticalStackLayout Spacing="10" HorizontalOptions="End" VerticalOptions="End" Margin="0,0,12,16"
+                                 IsVisible="{Binding HayReporteSeleccionado, Converter={StaticResource BoolInverso}}">
+                <Button Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Actualizar}" Command="{Binding CargarCommand}" />
+                <Button Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Ubicarme}" Command="{Binding UbicarmeCommand}"
+                        BackgroundColor="{StaticResource Rojo}" TextColor="White" />
+            </VerticalStackLayout>
+
+            <!-- Reporte seleccionado: tarjeta roja del mockup -->
+            <Border Margin="14,0,14,14" Padding="20,14" VerticalOptions="End"
+                    BackgroundColor="{StaticResource Rojo}" StrokeShape="RoundRectangle 26"
+                    IsVisible="{Binding HayReporteSeleccionado}">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.25" Radius="14" Offset="0,4" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="8" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="{Binding ReporteSeleccionado.Titulo}" FontSize="26" LineBreakMode="TailTruncation" MaxLines="2" />
+                        <Label Text="{Binding ReporteSeleccionado.FechaTexto}" FontSize="19" TextColor="#FFD5D5" />
+                    </VerticalStackLayout>
+                    <Border Grid.Column="1" Style="{StaticResource Etiqueta}"
+                            BackgroundColor="{Binding ReporteSeleccionado.Estado, Converter={StaticResource EstadoAFondo}}">
+                        <Label Text="{Binding ReporteSeleccionado.EstadoTexto}" FontSize="19"
+                               TextColor="{Binding ReporteSeleccionado.Estado, Converter={StaticResource EstadoATexto}}" />
+                    </Border>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
+                        <Label Style="{StaticResource Icono}" Text="{x:Static h:Iconos.Pin}" FontSize="16" />
+                        <Label Grid.Column="1" Text="{Binding ReporteSeleccionado.Ubicacion}" FontSize="17" TextColor="#FFD5D5"
+                               LineBreakMode="TailTruncation" VerticalOptions="Center" />
+                        <Button Grid.Column="2" Text="Ver detalle" FontSize="18" HeightRequest="34" Padding="16,0"
+                                CornerRadius="17" BackgroundColor="White" TextColor="{StaticResource Rojo}"
+                                Command="{Binding VerDetalleCommand}" />
+                        <Button Grid.Column="3" Style="{StaticResource BotonIcono}" Text="{x:Static h:Iconos.Cerrar}"
+                                WidthRequest="34" HeightRequest="34" CornerRadius="17" FontSize="16" Shadow="{x:Null}"
+                                BackgroundColor="#CC1F1F" TextColor="White"
+                                Command="{Binding CerrarSeleccionCommand}" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

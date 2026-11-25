@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="QuitoReporto.App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:h="clr-namespace:QuitoReporto.App.Helpers"
+    xmlns:auth="clr-namespace:QuitoReporto.App.Views.Auth"
+    xmlns:ciudadano="clr-namespace:QuitoReporto.App.Views.Ciudadano"
+    xmlns:admin="clr-namespace:QuitoReporto.App.Views.Admin"
+    xmlns:comun="clr-namespace:QuitoReporto.App.Views.Comun"
+    Title="QuitoReporto"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!-- Inicio de sesión (primera pantalla) -->
+    <ShellContent
+        Route="login"
+        Shell.NavBarIsVisible="False"
+        ContentTemplate="{DataTemplate auth:LoginPage}" />
+
+    <!-- Pestañas del ciudadano -->
+    <TabBar Route="ciudadano">
+        <ShellContent Title="Mapa" Route="mapa" ContentTemplate="{DataTemplate ciudadano:MapaPage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.Mapa}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Reportar" Route="nuevo" ContentTemplate="{DataTemplate ciudadano:NuevoReportePage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.MasCirculo}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Mis reportes" Route="misreportes" ContentTemplate="{DataTemplate ciudadano:MisReportesPage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.Lista}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Perfil" Route="perfil" ContentTemplate="{DataTemplate comun:PerfilPage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.Usuario}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+
+    <!-- Pestañas del administrador -->
+    <TabBar Route="admin">
+        <ShellContent Title="Panel" Route="panel" ContentTemplate="{DataTemplate admin:PanelAdminPage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.Panel}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Mapa" Route="mapaadmin" ContentTemplate="{DataTemplate ciudadano:MapaPage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.Mapa}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Perfil" Route="perfiladmin" ContentTemplate="{DataTemplate comun:PerfilPage}">
+            <ShellContent.Icon><FontImageSource FontFamily="Icons" Glyph="{x:Static h:Iconos.Usuario}" Size="22" /></ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+
+</Shell>
